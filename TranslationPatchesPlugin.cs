@@ -3,7 +3,13 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using Vagrus.Data;
+using Epic.OnlineServices;
+using System.Reflection;
+using VagrusTranslationPatches.Utils;
+
 
 namespace VagrusTranslationPatches
 {
@@ -20,7 +26,7 @@ namespace VagrusTranslationPatches
         // 1.0.0
         private const string MyGUID = "ru.Vagrus.TranslationPatches";
         private const string PluginName = "TranslationPatches";
-        private const string VersionString = "0.0.2";
+        private const string VersionString = "0.1.1";
 
         // Config entry key strings
         // These will appear in the config file created by BepInEx and can also be used
@@ -81,8 +87,7 @@ namespace VagrusTranslationPatches
         }
 
         /// <summary>
-        /// Code executed every frame. See below for an example use case
-        /// to detect keypress via custom configuration.
+        /// Code executed every frame.
         /// </summary>
         private void Update()
         {
@@ -90,19 +95,31 @@ namespace VagrusTranslationPatches
             {
                 if (GeneralSettings.EnableLanguage)
                 {
-                    int id = Game.game.settings.pubSettings.language;
-                    long packId = Game.game.settings.pubSettings.languagePackId;
+                    var game = Game.game;
+                    int id = game.settings.pubSettings.language;
+                    long packId = game.settings.pubSettings.languagePackId;
                     Game.game.settings.SetLanguage(id, packId, false);
                     Game.AcceptLanguage(true);
                     if (Game.game.eventUIIsON)
                     {
                         var gameEvent = Game.GetActiveEvent();
-                        if (Game.GetActiveEvent() != null)
+                        if (Game.GetActiveEvent() != null && gameEvent.curStep!=null)
                         {
                             gameEvent.eventUI.RemoveUnusedChoicesFromLog(-1);
                             gameEvent.SelectStep(gameEvent.curStep);
+                            Logger.LogInfo("Событие "+ gameEvent.GetTitle()  + " обновлено.");
                         }
                     }
+                    TutorialUtils.UpdateTutorialText();
+
+
+                    if (game.caravan.bookUI.IsTop() && game.caravan.IsEnabledCodexUI())
+                    {
+                        game.caravan.CloseBookUI();
+                        game.caravan.OpenBookUI(BookType.Codex, false, null, false);
+                    }
+
+
                     Logger.LogInfo("Файлы перевода заново прочитаны.");
                 }
                 else
