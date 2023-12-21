@@ -19,7 +19,7 @@ namespace VagrusTranslationPatches.Patches
             string dayName = game.calendar.FormatDate("l");
             dayName = Game.FromDictionary(dayName);
             var curveText = Traverse.Create(__instance).Field("curveText").GetValue() as TextMeshProUGUI;
-            curveText.text = week + " " + dayName + "      " + year + " " + month + " " + day;
+            curveText.text = week + " " + dayName + "       " + year + " " + month + " " + day;
             CurveInfo curveInfo = new CurveInfo();
             curveInfo.radius = 415f;
             curveInfo.startAngle = 224f;

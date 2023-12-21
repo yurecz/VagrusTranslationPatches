@@ -25,14 +25,14 @@ namespace VagrusTranslationPatches.Utils
             }
             else if (lastDigit > 1 && lastDigit <= 4)
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen+"") ?? Game.FromDictionary(nomen + "s")}";
+                formattedText = $"{number} {Game.FromDictionary(nomen+"2") ?? Game.FromDictionary(nomen + "s")}";
             }
             else
             {
                 formattedText = $"{number} {Game.FromDictionary(nomen + "s")}";
             }
 
-            return formattedText;
+            return formattedText.ToLower();
         }
     }
 }

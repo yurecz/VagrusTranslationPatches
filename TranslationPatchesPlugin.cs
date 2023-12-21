@@ -3,11 +3,6 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using Vagrus.Data;
-using Epic.OnlineServices;
-using System.Reflection;
 using VagrusTranslationPatches.Utils;
 
 
@@ -113,7 +108,7 @@ namespace VagrusTranslationPatches
                     TutorialUtils.UpdateTutorialText();
 
 
-                    if (game.caravan.bookUI.IsTop() && game.caravan.IsEnabledCodexUI())
+                    if (game.caravan.bookUI != null && game.caravan.bookUI.IsTop() && game.caravan.IsEnabledCodexUI())
                     {
                         game.caravan.CloseBookUI();
                         game.caravan.OpenBookUI(BookType.Codex, false, null, false);
