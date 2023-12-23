@@ -114,7 +114,7 @@ namespace VagrusTranslationPatches
                         game.caravan.OpenBookUI(BookType.Codex, false, null, false);
                     }
 
-
+                    Game.game.caravan.InvalidateUI();
                     Logger.LogInfo("Файлы перевода заново прочитаны.");
                 }
                 else

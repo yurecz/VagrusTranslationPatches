@@ -1,0 +1,93 @@
+﻿using HarmonyLib;
+using TMPro;
+using VagrusTranslationPatches.Utils;
+
+namespace VagrusTranslationPatches.Patches
+{
+    [HarmonyPatch()]
+    internal class CampPatches
+    {
+
+        [HarmonyPatch(typeof(Camp), "DefenceOrderVirtualImpact")]
+        [HarmonyPrefix]
+        public static bool DefenceOrderVirtualImpact(Camp __instance, int defmode, bool show, out string guardposting, out string vigor)
+        {
+            guardposting = "";
+            vigor = ((defmode == 2) ? Game.FromDictionary("No bonuses; No penalties") : "");
+            if (__instance.IsSettlementCamp())
+            {
+                return false;
+            }
+            int unDefendedLevel = TweakFunctions.GetUnDefendedLevel(false);
+            bool flag = TweakFunctions.IsGeneralCampEnabled(defmode, false);
+            bool flag2 = TweakFunctions.IsGeneralCampEnabled(defmode, true);
+            if (defmode != 1)
+            {
+                if (defmode - 2 > 1)
+                {
+                    return false;
+                }
+                if (flag2 && !flag)
+                {
+                    PropQty propQty = new PropQty(Prop.Vigor, -GeneralSettings.GeneralCampVigorCost);
+                    if (show)
+                    {
+                        guardposting = "<b>" + Game.FromDictionary("Post " + ((defmode == 3) ? "extra " : "") + "guards (insufficient armed crew)") + "</b>";
+                        vigor = global::String.Sign(propQty.qty, true) + " " + BaseUI.game.caravan.FindProperty(propQty.prop).GetTitle(false);
+                        return false;
+                    }
+                    Camp.game.caravan.AddProperty(propQty.prop, propQty.qty, false);
+                    return false;
+                }
+                else if (flag)
+                {
+                    if (show)
+                    {
+                        guardposting = "<b>" + Game.FromDictionary("Post " + ((defmode == 3) ? "extra " : "") + "guards (sufficient armed crew)") + "</b>";
+                        return false;
+                    }
+                    return false;
+                }
+                else
+                {
+                    if (show)
+                    {
+                        guardposting = "<b>" + Game.FromDictionary("Post " + ((defmode == 3) ? "extra " : "") + "guards") + "</b>";
+                        return false;
+                    }
+                    return false;
+                }
+            }
+            else if (unDefendedLevel == 3)
+            {
+                if (show)
+                {
+                    guardposting = "<b>" + Game.FromDictionary("Unable to post guards") + "</b>";
+                    return false;
+                }
+                return false;
+            }
+            else if (unDefendedLevel <= 1)
+            {
+                PropQty propQty2 = new PropQty(Prop.Vigor, GeneralSettings.GeneralCampVigorCost);
+                if (show)
+                {
+                    guardposting = "<b>" + Game.FromDictionary("Post no guards") + "</b>";
+                    vigor = global::String.Sign(propQty2.qty, true) + " " + BaseUI.game.caravan.FindProperty(propQty2.prop).GetTitle(false);
+                    return false;
+                }
+                Camp.game.caravan.AddProperty(propQty2.prop, propQty2.qty, false);
+                return false;
+            }
+            else
+            {
+                if (show)
+                {
+                    guardposting = "<b>" + Game.FromDictionary("Post no guards") + "</b>";
+                    return false;
+                }
+                return false;
+            }
+        }
+    }
+}
