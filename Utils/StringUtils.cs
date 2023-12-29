@@ -9,5 +9,10 @@ namespace VagrusTranslationPatches.Utils
         {
             return str[0].ToString().ToUpper() + str.Substring(1);
         }
+
+        public static string FromDictionary(this string str)
+        {
+            return Game.FromDictionary(str);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using System.Linq;
 using UnityEngine;
 using VagrusTranslationPatches.Utils;
 
@@ -106,20 +107,19 @@ namespace VagrusTranslationPatches
                         }
                     }
                     TutorialUtils.UpdateTutorialText();
-
-
-                    if (game.caravan.bookUI != null && game.caravan.bookUI.IsTop() && game.caravan.IsEnabledCodexUI())
+                    Game.game.caravan.InvalidateUI();
+                    if (game.caravan.bookUI != null && game.caravan.bookUI.IsTop() && game.caravan.IsOpenBookUI(BookType.Any))
                     {
+                        var bookType = game.caravan.bookUI.bookType;
                         game.caravan.CloseBookUI();
-                        game.caravan.OpenBookUI(BookType.Codex, false, null, false);
+                        game.caravan.OpenBookUI(bookType, false, null, false);
                     }
 
-                    Game.game.caravan.InvalidateUI();
                     Logger.LogInfo("Файлы перевода заново прочитаны.");
                 }
                 else
                 {
-                    Logger.LogInfo("Файлы перевода непрочитаны, так как перевод не включён в настройках игры.");
+                    Logger.LogInfo("Файлы перевода непрочитаны, так как перевод не включен в настройках игры.");
                 }
             }
         }

@@ -144,7 +144,8 @@ namespace VagrusTranslationPatches.Patches
                         FontUtils.Update(textMesh, tmp_FontAsset, "UIFontUpdater");
                         if (__instance.name.Contains("ChartUI"))
                         {
-                            textMesh.outlineColor = new Color32(236, 226, 198, 255);
+                            //textMesh.outlineColor = new Color32(236, 226, 198, 255);
+                            textMesh.outlineColor = new Color32(240, 255, 255, 255);
                             textMesh.outlineWidth = 0.23f;
                             textMesh.materialForRendering.EnableKeyword(ShaderUtilities.Keyword_Outline);
                         }

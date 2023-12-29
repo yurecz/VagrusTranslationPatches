@@ -33,62 +33,70 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.ResourceManager.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Services.Core">
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.Services.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MonoBehaviours\NarrationComponent.cs" />
+    <Compile Include="Patches\EventChoiceButtonPatch.cs" />
+    <Compile Include="Patches\EquipmentMountBoxPatch.cs" />
     <Compile Include="Patches\CalendarUIPatch.cs" />
     <Compile Include="Patches\CampPatches.cs" />
     <Compile Include="Patches\RumorPatches.cs" />
@@ -113,8 +121,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\plugins\$(TargetName)"
+    <PostBuildEvent>mkdir "D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\plugins\$(TargetName)"
 
-xcopy /q/y/i "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\plugins\$(TargetName)" /E /H /C</PostBuildEvent>
+xcopy /q/y/i "$(TargetPath)" "D:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\BepInEx\plugins\$(TargetName)" /E /H /C</PostBuildEvent>
   </PropertyGroup>
 </Project>
