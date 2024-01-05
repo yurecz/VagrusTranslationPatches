@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.Linq;
 using UnityEngine;
+using VagrusTranslationPatches.Patches;
 using VagrusTranslationPatches.Utils;
 
 
@@ -71,14 +72,11 @@ namespace VagrusTranslationPatches
             //IntExample.SettingChanged += ConfigSettingChanged;
             KeyboardShortcutRereadTranslationFiles.SettingChanged += ConfigSettingChanged;
 
-            // Apply all of our patches
+            new Translators();
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
             Harmony.PatchAll();
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
 
-            // Sets up our static Log, so it can be used elsewhere in code.
-            // .e.g.
-            // VagrusTestModePlugin.Log.LogDebug("Debug Message to BepInEx log file");
             Log = Logger;
         }
 

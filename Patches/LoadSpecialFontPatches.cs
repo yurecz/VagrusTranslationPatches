@@ -200,6 +200,22 @@ namespace VagrusTranslationPatches.Patches
             return false;
         }
 
+        [HarmonyPatch(typeof(UIElementTranslator), "Start")]
+        [HarmonyPrefix]
+        public static void Start_Prefix(UIElementTranslator __instance)
+        {
+            if (__instance.textMesh!=null)
+                Translators.translators.Add(__instance.textMesh, __instance);
+        }
+
+        [HarmonyPatch(typeof(UIElementTranslator), "OnDestroy")]
+        [HarmonyPrefix]
+        public static void OnDestroy_Prefix(UIElementTranslator __instance)
+        {
+            if (__instance.textMesh != null)
+                Translators.translators.Remove(__instance.textMesh);
+        }
+
         [HarmonyPatch(typeof(UIElementTranslator), "TranslateUIElement")]
         [HarmonyPrefix]
         public static bool TranslateUIElement_Prefix(UIElementTranslator __instance)
