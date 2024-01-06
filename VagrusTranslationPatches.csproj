@@ -95,7 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MonoBehaviours\NarrationComponent.cs" />
-    <Compile Include="Patches\CharUI2Patch.cs" />
+    <Compile Include="Patches\GamePatches.cs" />
+    <Compile Include="Patches\SkillDisplayPatches.cs" />
+    <Compile Include="Patches\CharUI2Patches.cs" />
     <Compile Include="Patches\EventUIPatch.cs" />
     <Compile Include="Patches\MarketUIPatch.cs" />
     <Compile Include="Patches\EventChoiceButtonPatch.cs" />

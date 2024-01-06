@@ -72,7 +72,7 @@ namespace VagrusTranslationPatches
             //IntExample.SettingChanged += ConfigSettingChanged;
             KeyboardShortcutRereadTranslationFiles.SettingChanged += ConfigSettingChanged;
 
-            new Translators();
+            //new Translators();
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
             Harmony.PatchAll();
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
