@@ -28,5 +28,26 @@ namespace VagrusTranslationPatches.Patches
             }
         }
 
+        [HarmonyPatch("UpdateCombatLoadingScreen")]
+        [HarmonyPostfix]
+        public static void UpdateCombatLoadingScreen_Postfix()
+        {
+            var combatLoading = Game.game.combatLoading;
+            if (combatLoading != null)
+            {
+                GameObject obj = combatLoading.transform.Find("Holder").gameObject;
+                _ = obj.transform.Find("Back/Skull").gameObject;
+                TextMeshProUGUI component = obj.transform.Find("Back/LoadingText").GetComponent<TextMeshProUGUI>();
+                component.text = Game.FromDictionary("Loading...");
+            }
+        }
+
+        [HarmonyPatch("HasDLC")]
+        [HarmonyPostfix]
+        public static void HasDLC_Postfix(ref bool __result)
+        {
+
+            __result = true;
+        }
     }
 }

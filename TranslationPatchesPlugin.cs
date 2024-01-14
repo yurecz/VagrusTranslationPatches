@@ -23,7 +23,7 @@ namespace VagrusTranslationPatches
         // 1.0.0
         private const string MyGUID = "ru.Vagrus.TranslationPatches";
         private const string PluginName = "TranslationPatches";
-        private const string VersionString = "0.1.1";
+        private const string VersionString = "0.3.0";
 
         // Config entry key strings
         // These will appear in the config file created by BepInEx and can also be used
@@ -78,6 +78,33 @@ namespace VagrusTranslationPatches
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
 
             Log = Logger;
+
+            SetGameFixedValues();
+        }
+
+        private static void SetGameFixedValues()
+        {
+            NewsTweak.Distance0Title = "Local".FromDictionary();
+
+            NewsTweak.Distance1Title = "Neighboring".FromDictionary();
+
+            NewsTweak.Distance2Title = "Nearby".FromDictionary();
+
+            NewsTweak.Distance3Title = "Distant".FromDictionary();
+
+            NewsTweak.Distance4Title = "Far away".FromDictionary();
+
+            NewsTweak.Distance5Title = "Unbelievably far".FromDictionary();
+
+            NewsTweak.Fresh0Title = "Fresh".FromDictionary();
+
+            NewsTweak.Fresh1Title = "Recent".FromDictionary();
+
+            NewsTweak.Fresh2Title = "Stale".FromDictionary();
+
+            NewsTweak.Fresh3Title = "Outdated".FromDictionary();
+
+            NewsTweak.Fresh4Title = "Very Old".FromDictionary();
         }
 
         /// <summary>
@@ -112,6 +139,8 @@ namespace VagrusTranslationPatches
                         game.caravan.CloseBookUI();
                         game.caravan.OpenBookUI(bookType, false, null, false);
                     }
+
+                    SetGameFixedValues();
 
                     Logger.LogInfo("Файлы перевода заново прочитаны.");
                 }

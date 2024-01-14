@@ -28,10 +28,11 @@ namespace VagrusTranslationPatches.Patches
             var resistances = __instance.transform.Find("CharacterSheet/Res/Resistances").GetComponent<TextMeshProUGUI>();
             resistances.text = Game.FromDictionary("Resistances");
 
+            ___labelArmorHardness.text = Game.FromDictionary(___labelArmorHardness.text);
+            ___labelVitalityDurability.text = Game.FromDictionary(___labelVitalityDurability.text);
+
             if (character == null) {
-                ___labelVitalityDurability.text = Game.FromDictionary("Vitality");
                 ___labelName.text = Game.FromDictionary("No Companions");
-                ___labelArmorHardness.text = Game.FromDictionary("Armor");
                 ___labelLoyalty.text = "";
             }
         }

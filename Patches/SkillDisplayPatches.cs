@@ -23,10 +23,9 @@ namespace VagrusTranslationPatches.Patches
             TextMeshProUGUI ___labelDmgHeal
         )
         {
-
+            ___labelDmgHeal.text = Game.FromDictionary(___labelDmgHeal.text);
             if (___gchar == null || ___baseSkill == null) { 
                 ___labelName.text = Game.FromDictionary("No Skill");
-                ___labelDmgHeal.text = Game.FromDictionary("DMG");
             }
         }
 

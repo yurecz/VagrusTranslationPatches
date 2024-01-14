@@ -16,16 +16,63 @@ namespace VagrusTranslationPatches.Patches
     internal class LoadSpecialFontPatches
     {
 
-        public static TMP_FontAsset specialFont = null;
-        public static TMP_FontAsset specialFont2 = null;
+        public static Dictionary<string,string> replacementFontFiles= new Dictionary<string, string>();
+        public static Dictionary<string, TMP_FontAsset> replacementFonts = new Dictionary<string, TMP_FontAsset>();
 
         [HarmonyPatch(typeof(Game), "LoadSpecialFont", new Type[] { typeof(bool) })]
         [HarmonyPostfix]
         public static void LoadSpecialFont_Postfix(Game __instance, bool secondary = false)
         {
             var onLanguageChange = Traverse.Create(typeof(Game)).Field("onLanguageChange").GetValue() as UnityEvent;
-            if (Game.GetLanguageCode(secondary) == "ru" && specialFont == null)
+            if (Game.GetLanguageCode(secondary) == "ru")
             {
+                replacementFontFiles.Clear();
+                replacementFonts.Clear();
+
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "ofont.ru_Academy.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "ofont.ru_Palatino-Bold-Italic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "ofont.ru_Academy Condensed.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "ofont.ru_BrushType-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "ofont.ru_BrushType-SemiBold-Italic.ttf");
+
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "Spectral\\Spectral-Italic.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "EB Garamond\\EBGaramond-BoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "Spectral\\Spectral-Regular.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "EB Garamond\\EBGaramond-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "EB Garamond\\EBGaramond-SemiBoldItalic.ttf");
+
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "Sofia Sans Extra Condensed\\SofiaSansExtraCondensed-Italic.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Extra Condensed\\SofiaSansExtraCondensed-BoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "Sofia Sans Extra Condensed\\SofiaSansExtraCondensed-Regular.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Extra Condensed\\SofiaSansExtraCondensed-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Extra Condensed\\SofiaSansExtraCondensed-SemiBoldItalic.ttf");
+
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-Italic.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-BoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "Sofia Sans Condensed\\SofiaSansCondensed-Regular.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
+
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-Italic.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-BoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-Regular.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-SemiBoldItalic.ttf");
+
+                replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                replacementFontFiles.Add("CrimsonText-Italic SDF", "ofont.ru_Academy.ttf");
+                replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-BoldItalic.ttf");
+                replacementFontFiles.Add("CrimsonText-Regular SDF", "ofont.ru_Academy Condensed.ttf");
+                replacementFontFiles.Add("CrimsonText-Menu-Regular SDF", "ofont.ru_Franklin Gothic Medium Cond.ttf");
+                replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
+                replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
+
+
                 Game.LoadedLanguagePacks.TryGetValue("ru", out var value);
                 long currentLanguagePackID = Game.GetCurrentLanguagePackID(secondary);
                 if (value == null)
@@ -40,34 +87,34 @@ namespace VagrusTranslationPatches.Patches
                 string text = ((value[i].ID == -1) ? Path.Combine(value[i].InstallPath, "reviewed") : Path.Combine(value[i].InstallPath, "lang"));
                 if (Directory.Exists(text))
                 {
-                    string path = Path.Combine(text, "font.ttf");
-                    if (File.Exists(path))
+                    foreach (var replacementFontFile in replacementFontFiles)
                     {
-                        TMP_FontAsset font = TMP_FontAsset.CreateFontAsset(new UnityEngine.Font(path));
-                        specialFont = font;
-                        string path2 = Path.Combine(text, "ofont.ru_Caslon Becker.ttf");
-                        if (File.Exists(path2))
+                        string path = Path.Combine(text, "fonts", replacementFontFile.Value);
+                        if (File.Exists(path))
                         {
-                            TMP_FontAsset font2 = TMP_FontAsset.CreateFontAsset(new UnityEngine.Font(path2));
-                            specialFont2 = font2;
+                            Font font = new Font(path);
+                            TMP_FontAsset fontAsset = TMP_FontAsset.CreateFontAsset(font);
+                            fontAsset.name = replacementFontFile.Key;
+                            replacementFonts.Add(replacementFontFile.Key, fontAsset);
                         }
-                        onLanguageChange.Invoke();
+                     
                     }
+                    onLanguageChange.Invoke();
                 }
             }
         }
 
-        [HarmonyPatch(typeof(Game), "TryGetSpecialFont")]
-        [HarmonyPostfix]
-        public static bool TryGetSpecialFont_Postfix(bool result, string languageCode, ref TMP_FontAsset fontasset)
-        {
-            if (languageCode == "ru" && specialFont != null)
-            {
-                fontasset = specialFont;
-                return true;
-            }
-            else return result;
-        }
+        //[HarmonyPatch(typeof(Game), "TryGetSpecialFont")]
+        //[HarmonyPostfix]
+        //public static bool TryGetSpecialFont_Postfix(bool result, string languageCode, ref TMP_FontAsset fontasset)
+        //{
+        //    if (languageCode == "ru" && specialFont != null)
+        //    {
+        //        fontasset = specialFont;
+        //        return true;
+        //    }
+        //    else return result;
+        //}
 
         [HarmonyPatch(typeof(UIFontUpdater), "Awake")]
         [HarmonyPostfix]
@@ -83,20 +130,12 @@ namespace VagrusTranslationPatches.Patches
             TranslationPatchesPlugin.Log.LogInfo("Registered UITranslator on " + __instance.gameObject.GetFullName());
         }
 
-        [HarmonyPatch(typeof(UIElementTranslator), "Start")]
-        [HarmonyPostfix]
-        public static void Start_Postfix(UIElementTranslator __instance)
-        {
-            TranslationPatchesPlugin.Log.LogInfo("Registered UIElementTranslator on " + __instance.gameObject.GetFullName());
-        }
-
 
         [HarmonyPatch(typeof(UIFontUpdater), "OnLanguageChange")]
         [HarmonyPrefix]
         public static bool OnLanguageChange_Prefix(UIFontUpdater __instance)
         {
             var keyUIPairs = Traverse.Create(__instance).Field("keyPairs").GetValue() as List<UITranslator.KeyUIPair>;
-            Game.TryGetSpecialFont(Game.GetLanguageCode(), out var fontasset);
             for (int i = 0; i < keyUIPairs.Count; i++)
             {
                 UITranslator.KeyUIPair keyUIPair = keyUIPairs[i];
@@ -105,18 +144,22 @@ namespace VagrusTranslationPatches.Patches
                     keyUIPairs.RemoveAt(i);
                     i--;
                 }
-                else if (fontasset != null)
-                {
-                    FontUtils.Update(keyUIPair.textMesh, fontasset, "UIFontUpdater");
-                }
                 else
                 {
-                    keyUIPair.textMesh.font = keyUIPair.firstFont;
+                    FontUtils.Update(keyUIPair.textMesh, keyUIPair.firstFont, "UIFontUpdater");
                 }
             }
 
             return false;
         }
+
+                   //if (__instance.name.Contains("ChartUI"))
+                   //     {
+                   //         //textMesh.outlineColor = new Color32(236, 226, 198, 255);
+                   //         textMesh.outlineColor = new Color32(240, 255, 255, 255);
+                   //         textMesh.outlineWidth = 0.23f;
+                   //         textMesh.materialForRendering.EnableKeyword(ShaderUtilities.Keyword_Outline);
+                   //     }
 
         [HarmonyPatch(typeof(UIFontUpdater), "FindAllTextAndChangeFont")]
         [HarmonyPrefix]
@@ -139,17 +182,7 @@ namespace VagrusTranslationPatches.Patches
                         textMesh = textMesh,
                         firstFont = textMesh.font
                     });
-                    if (Game.TryGetSpecialFont(Game.GetLanguageCode(false), out TMP_FontAsset tmp_FontAsset))
-                    {
-                        FontUtils.Update(textMesh, tmp_FontAsset, "UIFontUpdater");
-                        if (__instance.name.Contains("ChartUI"))
-                        {
-                            //textMesh.outlineColor = new Color32(236, 226, 198, 255);
-                            textMesh.outlineColor = new Color32(240, 255, 255, 255);
-                            textMesh.outlineWidth = 0.23f;
-                            textMesh.materialForRendering.EnableKeyword(ShaderUtilities.Keyword_Outline);
-                        }
-                    }
+                    FontUtils.Update(textMesh, null, "UIFontUpdater");
                 }
             }
 
@@ -162,42 +195,36 @@ namespace VagrusTranslationPatches.Patches
         public static bool TranslateUIElements_Prefix(UITranslator __instance)
         {
             var keyUIPairs = Traverse.Create(__instance).Field("keyUIPairs").GetValue() as KeyUIPair[];
-            Game.TryGetSpecialFont(Game.GetLanguageCode(), out var fontasset);
-            KeyUIPair[] array = keyUIPairs;
-            foreach (KeyUIPair keyUIPair in array)
+            foreach (KeyUIPair keyUIPair in keyUIPairs)
             {
-                if (!(keyUIPair.textMesh != null))
+                if (keyUIPair.textMesh == null)
                 {
                     continue;
                 }
+
+                FontUtils.Update(keyUIPair.textMesh, keyUIPair.firstFont, "UITranslator");
+
                 if (keyUIPair.KeyText != "")
                 {
                     if (Game.Dictionary.TryGetValue(keyUIPair.KeyText.ToLower().Trim('\n', ' '), out var value))
                     {
-                        keyUIPair.textMesh.text = (keyUIPair.NoScaling ? value : Game.GetScaledLocalizedText(keyUIPair.textMesh, keyUIPair.KeyText, value));
                         keyUIPair.textMesh.richText = true;
-                        if (fontasset != null)
-                        {
-                            FontUtils.Update(keyUIPair.textMesh, fontasset, "UITranslator");
-                        }
-                        else
-                        {
-                            keyUIPair.textMesh.font = keyUIPair.firstFont;
-                        }
+                        keyUIPair.textMesh.text = (keyUIPair.NoScaling ? value : Game.GetScaledLocalizedText(keyUIPair.textMesh, keyUIPair.KeyText, value));
                     }
                     else
                     {
                         keyUIPair.textMesh.text = keyUIPair.KeyText;
-                        keyUIPair.textMesh.font = keyUIPair.firstFont;
                     }
-                }
-                else
-                {
-                    keyUIPair.textMesh.font = keyUIPair.firstFont;
                 }
 
             }
             return false;
+        }
+        [HarmonyPatch(typeof(UIElementTranslator), "Start")]
+        [HarmonyPostfix]
+        public static void Start_Postfix(UIElementTranslator __instance)
+        {
+            TranslationPatchesPlugin.Log.LogInfo("Registered UIElementTranslator on " + __instance.gameObject.GetFullName());
         }
 
         [HarmonyPatch(typeof(UIElementTranslator), "Start")]
@@ -225,8 +252,8 @@ namespace VagrusTranslationPatches.Patches
             var firstFont = __instance.firstFont;
             var NoScaling = __instance.NoScaling;
             var IsTextTemplate = __instance.IsTextTemplate;
-            Game.TryGetSpecialFont(Game.GetLanguageCode(), out var fontasset);
             string value;
+            FontUtils.Update(textMesh, firstFont, "UIElementTranslator");
             if (IsTextTemplate)
             {
                 TextTemplate textTemplate = TextTemplate.FindByName(keyText);
@@ -234,34 +261,13 @@ namespace VagrusTranslationPatches.Patches
                 {
                     Debug.LogError("No text template exists with the name: " + keyText);
                 }
-                textMesh.text = (NoScaling ? textTemplate.GetText() : Game.GetScaledLocalizedText(textMesh, textTemplate.text, textTemplate.GetText()));
                 textMesh.richText = true;
-                if (fontasset != null)
-                {
-                    FontUtils.Update(textMesh, fontasset, "UIElementTranslator");
-                }
-                else
-                {
-                    textMesh.font = firstFont;
-                }
+                textMesh.text = (NoScaling ? textTemplate.GetText() : Game.GetScaledLocalizedText(textMesh, textTemplate.text, textTemplate.GetText()));
             }
             else if (Game.Dictionary.TryGetValue(keyText.ToLower().Trim('\n', ' '), out value))
             {
-                textMesh.text = (NoScaling ? value : Game.GetScaledLocalizedText(textMesh, keyText, value));
                 textMesh.richText = true;
-                if (fontasset != null)
-                {
-                    FontUtils.Update(textMesh, fontasset, "UIElementTranslator");
-                }
-                else
-                {
-                    textMesh.font = firstFont;
-                }
-            }
-            else
-            {
-                textMesh.text = keyText;
-                textMesh.font = firstFont;
+                textMesh.text = (NoScaling ? value : Game.GetScaledLocalizedText(textMesh, keyText, value));
             }
             return false;
         }

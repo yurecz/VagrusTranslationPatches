@@ -6,15 +6,15 @@ using VagrusTranslationPatches.Utils;
 namespace VagrusTranslationPatches.Patches
 {
 
-    [HarmonyPatch()]
+    [HarmonyPatch(typeof(CrewUI))]
     internal class CrewUIPatches
     {
-        [HarmonyPatch(typeof(CrewUI),"FindComponents")]
+        [HarmonyPatch("FindComponents")]
         [HarmonyPostfix]
         public static void FindComponents_Postfix(CrewUI __instance)
         {
-           var unpaidDaysText = Game.game.camp.GetUnpaidDays().FormatNumberByNomen("day");
-           var conditionRows = Traverse.Create(__instance).Field("conditionRows").GetValue() as Transform[];
+            var unpaidDaysText = Game.game.camp.GetUnpaidDays().FormatNumberByNomen("day");
+            var conditionRows = Traverse.Create(__instance).Field("conditionRows").GetValue() as Transform[];
 
 
             conditionRows[0].Find("Label").gameObject.GetComponent<TextMeshProUGUI>().text = BaseUI.game.caravan.FindProperty(Prop.Vigilance).GetTitle(false);
@@ -30,6 +30,11 @@ namespace VagrusTranslationPatches.Patches
             conditionRows[10].Find("Label").gameObject.GetComponent<TextMeshProUGUI>().text = BaseUI.game.caravan.FindProperty(Prop.SlaveWorkforce).GetTitle(false);
             conditionRows[11].Find("Label").gameObject.GetComponent<TextMeshProUGUI>().text = BaseUI.game.caravan.FindProperty(Prop.WorkerWorkforce).GetTitle(false);
             conditionRows[12].Find("Label").gameObject.GetComponent<TextMeshProUGUI>().text = BaseUI.game.caravan.FindProperty(Prop.ScoutingBase).GetTitle(false);
+
+            for (var i = 0; i < conditionRows.Length; i++)
+            {
+                TranslationPatchesPlugin.Log.LogMessage("CrewUI patched conditionRows:" + conditionRows[i].gameObject.GetFullName());
+            }
         }
     }
 }

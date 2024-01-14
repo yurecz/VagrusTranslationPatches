@@ -14,5 +14,21 @@ namespace VagrusTranslationPatches.Utils
         {
             return Game.FromDictionary(str);
         }
+
+        public static string FromDictionaryScaled(this string str)
+        {
+            var newText = str.FromDictionary();
+            if (newText != str)
+            {
+                return Game.GetScaledLocalizedText(str, str.FromDictionary());
+            } else
+            {
+                return newText;
+            }
+        }
+        public static string GetScaledLocalizedText(this string str, string original)
+        {
+            return Game.GetScaledLocalizedText(original, str);
+        }
     }
 }
