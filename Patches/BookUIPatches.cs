@@ -628,5 +628,19 @@ namespace VagrusTranslationPatches.Patches
             string title = (rumor.IsArchived() ? "Unarchive".FromDictionary() : "Archive".FromDictionary());
             ___buttonArchive.SetTitle(title);
         }
+
+
+        [HarmonyPatch("UpdateCardOffset")]
+        [HarmonyPrefix]
+        public static bool UpdateCardOffset(TaskCard card, ref float ___rightVOffset, ref float ___rightHOffset)
+        {
+            ___rightHOffset += 500f;
+            if (___rightHOffset > 500f)
+            {
+                ___rightHOffset = 0f;
+                ___rightVOffset += 130f;
+            }
+            return false;
+        }
     }
 }

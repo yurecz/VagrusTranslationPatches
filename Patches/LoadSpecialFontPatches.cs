@@ -1,11 +1,15 @@
-﻿using HarmonyLib;
+﻿using BepInEx;
+using HarmonyLib;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using Vagrus;
+using Vagrus.IO;
 using VagrusTranslationPatches.Utils;
 using static Vagrus.UITranslator;
 
@@ -16,7 +20,6 @@ namespace VagrusTranslationPatches.Patches
     internal class LoadSpecialFontPatches
     {
 
-        public static Dictionary<string,string> replacementFontFiles= new Dictionary<string, string>();
         public static Dictionary<string, TMP_FontAsset> replacementFonts = new Dictionary<string, TMP_FontAsset>();
 
         [HarmonyPatch(typeof(Game), "LoadSpecialFont", new Type[] { typeof(bool) })]
@@ -26,7 +29,6 @@ namespace VagrusTranslationPatches.Patches
             var onLanguageChange = Traverse.Create(typeof(Game)).Field("onLanguageChange").GetValue() as UnityEvent;
             if (Game.GetLanguageCode(secondary) == "ru")
             {
-                replacementFontFiles.Clear();
                 replacementFonts.Clear();
 
                 //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
@@ -64,14 +66,14 @@ namespace VagrusTranslationPatches.Patches
                 //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-SemiBold.ttf");
                 //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Semi Condensed\\SofiaSansSemiCondensed-SemiBoldItalic.ttf");
 
-                replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
-                replacementFontFiles.Add("CrimsonText-Italic SDF", "ofont.ru_Academy.ttf");
-                replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-BoldItalic.ttf");
-                replacementFontFiles.Add("CrimsonText-Regular SDF", "ofont.ru_Academy Condensed.ttf");
-                replacementFontFiles.Add("CrimsonText-Menu-Regular SDF", "ofont.ru_Franklin Gothic Medium Cond.ttf");
-                replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
-                replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
-                replacementFontFiles.Add("CrimsonText - Overlay - SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "ofont.ru_Academy.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-BoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "ofont.ru_Academy Condensed.ttf");
+                //replacementFontFiles.Add("CrimsonText-Menu-Regular SDF", "ofont.ru_Franklin Gothic Medium Cond.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText - Overlay - SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
 
                 //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
                 //replacementFontFiles.Add("CrimsonText-Italic SDF", "ofont.ru_Academy.ttf");
@@ -82,29 +84,41 @@ namespace VagrusTranslationPatches.Patches
                 //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
                 //replacementFontFiles.Add("CrimsonText - Overlay - SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
 
+
+
                 Game.LoadedLanguagePacks.TryGetValue("ru", out var value);
                 long currentLanguagePackID = Game.GetCurrentLanguagePackID(secondary);
                 if (value == null)
                 {
                     return;
                 }
-                int i;
-                for (i = 0; i < value.Count && value[i].ID != currentLanguagePackID; i++)
+
+                var currentDirectory = Directory.GetCurrentDirectory();
+                string iniFontFile = Path.Combine(currentDirectory, "BepInEx\\plugins\\VagrusTranslationPatches","fonts.ini");
+
+                if (File.Exists(iniFontFile))
                 {
-                }
-                i = ((i != value.Count) ? i : 0);
-                string text = ((value[i].ID == -1) ? Path.Combine(value[i].InstallPath, "reviewed") : Path.Combine(value[i].InstallPath, "lang"));
-                if (Directory.Exists(text))
-                {
-                    foreach (var replacementFontFile in replacementFontFiles)
+
+                    JObject fontSettings = JObject.Parse(File.ReadAllText(iniFontFile));
+                    foreach (var replacementFontFile in (JArray)fontSettings["FontMappings"])
                     {
-                        string path = Path.Combine(text, "fonts", replacementFontFile.Value);
-                        if (File.Exists(path))
+                        string fontPath = (string)replacementFontFile["FontPath"];
+                        string fontAssetName = (string)replacementFontFile["FontAsset"];
+                        if (!Path.IsPathRooted(fontPath))
                         {
-                            Font font = new Font(path);
+                            fontPath = Path.Combine(currentDirectory, "BepInEx\\plugins\\VagrusTranslationPatches", "Fonts", fontPath);
+                        }
+
+                        if (File.Exists(fontPath))
+                        {
+                            Font font = new Font(fontPath);
                             TMP_FontAsset fontAsset = TMP_FontAsset.CreateFontAsset(font);
-                            fontAsset.name = replacementFontFile.Key;
-                            replacementFonts.Add(replacementFontFile.Key, fontAsset);
+                            fontAsset.name = fontAssetName;
+                            replacementFonts.Add(fontAssetName, fontAsset);
+                        }
+                        else
+                        {
+                            TranslationPatchesPlugin.Log.LogError("Font file missing:" + fontPath);
                         }
                      
                     }
