@@ -1,4 +1,5 @@
 ﻿using Epic.OnlineServices.Auth;
+using Epic.OnlineServices.UserInfo;
 using UnityEngine;
 
 namespace VagrusTranslationPatches.Utils
@@ -8,8 +9,9 @@ namespace VagrusTranslationPatches.Utils
         public static string FormatNumberByNomen(this int number, string nomen)
         {
             int lastDigit = number % 10;
-            string formattedText = "";
-            if (number > 4 && number <= 20) 
+            int last2Digit = number % 100;
+            string formattedText;
+            if (last2Digit > 4 && last2Digit <= 20) 
             {
                 formattedText = $"{number} {Game.FromDictionary(nomen + "s")}";
             }

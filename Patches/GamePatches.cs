@@ -14,6 +14,14 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(Game))]
     internal class GamePatches
     {
+
+        [HarmonyPatch("Awake")]
+        [HarmonyPostfix]
+        public static void Awake_Postfix()
+        {
+            TranslationPatchesPlugin.SetGameFixedValues();
+        }
+
         [HarmonyPatch("ShowLoadGame")]
         [HarmonyPostfix]
         public static void ShowLoadGame_Postfix(

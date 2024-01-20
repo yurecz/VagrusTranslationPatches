@@ -10,6 +10,15 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(PoolLoader))]
     public class PoolLoaderPatches
     {
+
+
+        [HarmonyPatch("LoadLocalization")]
+        [HarmonyPostfix]
+        public static void LoadLocalization_Postfix()
+        {
+            TranslationPatchesPlugin.SetGameFixedValues();
+        }
+
         [HarmonyPatch(nameof(PoolLoader.LoadEventTranslationFromFile))]
         [HarmonyPostfix]
         public static void LoadEventTranslationFromFile_Postfix(ref bool __result, string path, bool secondary = false)

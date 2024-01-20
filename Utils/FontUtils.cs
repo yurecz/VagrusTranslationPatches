@@ -35,7 +35,7 @@ namespace VagrusTranslationPatches.Utils
                     Color32 faceColor = textMesh.faceColor;
                     Shader shader = textMesh.material.shader;
                     string text3 = textMesh.text;
-
+                    var alignment = textMesh.alignment;
                     //new font
                     textMesh.font = replacementFont;
 
@@ -44,6 +44,7 @@ namespace VagrusTranslationPatches.Utils
                     textMesh.fontSize = fontSize;
                     textMesh.fontSizeMin = fontSizeMin;
                     textMesh.fontSizeMax = fontSizeMax;
+                    textMesh.alignment = alignment;
                     foreach (string keyword in shaderKeywords)
                     {
                         textMesh.materialForRendering.EnableKeyword(keyword);

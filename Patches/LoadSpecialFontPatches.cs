@@ -71,7 +71,16 @@ namespace VagrusTranslationPatches.Patches
                 replacementFontFiles.Add("CrimsonText-Menu-Regular SDF", "ofont.ru_Franklin Gothic Medium Cond.ttf");
                 replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
                 replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
+                replacementFontFiles.Add("CrimsonText - Overlay - SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
 
+                //replacementFontFiles.Add("Romanesco-Regular SDF", "ofont.ru_Caslon Becker.ttf");
+                //replacementFontFiles.Add("CrimsonText-Italic SDF", "ofont.ru_Academy.ttf");
+                //replacementFontFiles.Add("CrimsonText-BoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-BoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText-Regular SDF", "CMU Sans Serif\\cmunssdc.ttf");
+                //replacementFontFiles.Add("CrimsonText-Menu-Regular SDF", "ofont.ru_Franklin Gothic Medium Cond.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
+                //replacementFontFiles.Add("CrimsonText-SemiBoldItalic SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBoldItalic.ttf");
+                //replacementFontFiles.Add("CrimsonText - Overlay - SemiBold SDF", "Sofia Sans Condensed\\SofiaSansCondensed-SemiBold.ttf");
 
                 Game.LoadedLanguagePacks.TryGetValue("ru", out var value);
                 long currentLanguagePackID = Game.GetCurrentLanguagePackID(secondary);

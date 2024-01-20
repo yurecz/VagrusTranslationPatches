@@ -10,6 +10,7 @@
     <RootNamespace>VagrusTranslationPatches</RootNamespace>
     <AssemblyName>VagrusTranslationPatches</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -99,15 +100,29 @@
     <Compile Include="MonoBehaviours\NarrationComponent.cs" />
     <Compile Include="Patches\BookUIPatches.cs" />
     <Compile Include="Patches\CargoEquipmentDataPatches.cs" />
+    <Compile Include="Patches\CombatCharacterPatches.cs" />
     <Compile Include="Patches\CrewRowPatches.cs" />
+    <Compile Include="Patches\EnhancedScrollControllerPatches.cs" />
+    <Compile Include="Patches\GameCharacterPatches.cs" />
+    <Compile Include="Patches\GameLogRowPatches.cs" />
     <Compile Include="Patches\GamePatches.cs" />
     <Compile Include="Patches\GearDraggablePatches.cs" />
     <Compile Include="Patches\GearPatches.cs" />
+    <Compile Include="Patches\GlossaryEntryLinePatches.cs" />
+    <Compile Include="Patches\GlossaryContentElementDataPatches.cs" />
+    <Compile Include="Patches\GlossaryUIPatches.cs" />
+    <Compile Include="Patches\HFResultUIPatches.cs" />
     <Compile Include="Patches\ImpactBlockPatches.cs" />
     <Compile Include="Patches\LoadingScreenPatches.cs" />
     <Compile Include="Patches\NodePatches.cs" />
     <Compile Include="Patches\PassengerPatches.cs" />
+    <Compile Include="Patches\ChartUIPatches.cs" />
+    <Compile Include="Patches\PerkPatches.cs" />
+    <Compile Include="Patches\PerkPerkButtonUIPatches.cs" />
+    <Compile Include="Patches\PerkUIPatches.cs" />
+    <Compile Include="Patches\POIAreaMarkerPatches.cs" />
     <Compile Include="Patches\PropertyPatches.cs" />
+    <Compile Include="Patches\ScoutUIPatches.cs" />
     <Compile Include="Patches\SkillDisplayPatches.cs" />
     <Compile Include="Patches\CharUI2Patches.cs" />
     <Compile Include="Patches\EventUIPatch.cs" />
@@ -121,11 +136,13 @@
     <Compile Include="Patches\RegionPatches.cs" />
     <Compile Include="Patches\LoadSpecialFontPatches.cs" />
     <Compile Include="Patches\PoolLoaderPatches.cs" />
+    <Compile Include="Patches\SkillPatches.cs" />
     <Compile Include="Patches\StickyUIValueDisplayPatches.cs" />
     <Compile Include="Patches\MiniCaravanUIPatches.cs" />
     <Compile Include="Patches\CampUIPatches.cs" />
     <Compile Include="Patches\TaskInstancePatches.cs" />
     <Compile Include="Patches\Translators.cs" />
+    <Compile Include="Patches\TweakFunctionsPatches.cs" />
     <Compile Include="TranslationPatchesPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\FontUtils.cs" />

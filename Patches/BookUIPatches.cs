@@ -63,6 +63,18 @@ namespace VagrusTranslationPatches.Patches
             {
                 entryPrefab.AddComponent<UIObjectTranslator>();
             }
+
+            var chapterPrefab = Resources.Load("UI/Book/Prefab/BookChapterBlock") as GameObject;
+            if (chapterPrefab != null && !chapterPrefab.HasComponent<UIFontUpdater>())
+            {
+                chapterPrefab.AddComponent<UIFontUpdater>();
+            }
+
+            var noteEditorPrefab = Resources.Load("UI/Book/Prefab/JournalNoteEditor") as GameObject;
+            if (noteEditorPrefab != null && !noteEditorPrefab.HasComponent<UIFontUpdater>())
+            {
+                noteEditorPrefab.AddComponent<UIFontUpdater>();
+            }
         }
 
         [HarmonyPatch("GetRewardTopText")]
@@ -613,7 +625,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void UpdateRumorArchiveButton(ButtonUI ___buttonArchive, Rumor rumor)
         {
-            string title = (rumor.IsArchived() ? "Unarchive".FromDictionaryScaled() : "Archive".FromDictionaryScaled());
+            string title = (rumor.IsArchived() ? "Unarchive".FromDictionary() : "Archive".FromDictionary());
             ___buttonArchive.SetTitle(title);
         }
     }

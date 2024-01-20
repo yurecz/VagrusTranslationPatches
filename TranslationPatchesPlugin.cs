@@ -10,7 +10,6 @@ using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches
 {
-    // TODO Review this file and update to your own requirements.
 
     [BepInPlugin(MyGUID, PluginName, VersionString)]
     public class TranslationPatchesPlugin : BaseUnityPlugin
@@ -72,44 +71,14 @@ namespace VagrusTranslationPatches
             //IntExample.SettingChanged += ConfigSettingChanged;
             KeyboardShortcutRereadTranslationFiles.SettingChanged += ConfigSettingChanged;
 
-            //new Translators();
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
-            Harmony.PatchAll();
+            Harmony.PatchAll();          
+
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
 
             Log = Logger;
 
-            SetGameFixedValues();
         }
-
-        private static void SetGameFixedValues()
-        {
-            NewsTweak.Distance0Title = "Local".FromDictionary();
-
-            NewsTweak.Distance1Title = "Neighboring".FromDictionary();
-
-            NewsTweak.Distance2Title = "Nearby".FromDictionary();
-
-            NewsTweak.Distance3Title = "Distant".FromDictionary();
-
-            NewsTweak.Distance4Title = "Far away".FromDictionary();
-
-            NewsTweak.Distance5Title = "Unbelievably far".FromDictionary();
-
-            NewsTweak.Fresh0Title = "Fresh".FromDictionary();
-
-            NewsTweak.Fresh1Title = "Recent".FromDictionary();
-
-            NewsTweak.Fresh2Title = "Stale".FromDictionary();
-
-            NewsTweak.Fresh3Title = "Outdated".FromDictionary();
-
-            NewsTweak.Fresh4Title = "Very Old".FromDictionary();
-        }
-
-        /// <summary>
-        /// Code executed every frame.
-        /// </summary>
         private void Update()
         {
             if (TranslationPatchesPlugin.KeyboardShortcutRereadTranslationFiles.Value.IsDown())
@@ -189,5 +158,35 @@ namespace VagrusTranslationPatches
                 // Code here to do something with the new value
             }
         }
+
+        public void Dispose()
+        {
+            Harmony.UnpatchSelf();
+        }
+        public static void SetGameFixedValues()
+        {
+            NewsTweak.Distance0Title = "Local".FromDictionary();
+
+            NewsTweak.Distance1Title = "Neighboring".FromDictionary();
+
+            NewsTweak.Distance2Title = "Nearby".FromDictionary();
+
+            NewsTweak.Distance3Title = "Distant".FromDictionary();
+
+            NewsTweak.Distance4Title = "Far away".FromDictionary();
+
+            NewsTweak.Distance5Title = "Unbelievably far".FromDictionary();
+
+            NewsTweak.Fresh0Title = "Fresh".FromDictionary();
+
+            NewsTweak.Fresh1Title = "Recent".FromDictionary();
+
+            NewsTweak.Fresh2Title = "Stale".FromDictionary();
+
+            NewsTweak.Fresh3Title = "Outdated".FromDictionary();
+
+            NewsTweak.Fresh4Title = "Very Old".FromDictionary();
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AOT;
 using UnityEngine;
+using Vagrus;
 
 namespace VagrusTranslationPatches.Utils
 {
@@ -20,6 +21,14 @@ namespace VagrusTranslationPatches.Utils
         public static bool HasComponent<T>(this GameObject flag) where T : Component
         {
             return flag.GetComponent<T>() != null;
+        }
+
+        public static void AddIfNotExistComponent<T>(this GameObject gamObject) where T : Component
+        {
+            if (gamObject != null && !gamObject.HasComponent<T>())
+            {
+                gamObject.AddComponent<T>();
+            }
         }
     }
 
