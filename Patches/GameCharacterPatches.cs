@@ -9,7 +9,7 @@ namespace VagrusTranslationPatches.Patches
     {
         [HarmonyPatch(nameof(GameCharacter.Heal))]
         [HarmonyPrefix]
-        public static bool Awake_Prefix(GameCharacter __instance, ref string __result, CriticalTestResult result, bool healBoost, ref int medKitUsed)
+        public static bool Heal_Prefix(GameCharacter __instance, ref string __result, CriticalTestResult result, bool healBoost, ref int medKitUsed)
         {
             string text = "";
             int num = __instance.GetVitality();

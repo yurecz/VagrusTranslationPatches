@@ -20,7 +20,7 @@ namespace VagrusTranslationPatches.Patches
     internal class LoadSpecialFontPatches
     {
 
-        public static Dictionary<string, TMP_FontAsset> replacementFonts = new Dictionary<string, TMP_FontAsset>();
+        public static List<FontReplacerRecord> replacementFonts = new List<FontReplacerRecord>();
 
         [HarmonyPatch(typeof(Game), "LoadSpecialFont", new Type[] { typeof(bool) })]
         [HarmonyPostfix]
