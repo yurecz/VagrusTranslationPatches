@@ -6,6 +6,10 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Vagrus;
+using Vagrus.UI;
+using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
 {
@@ -13,6 +17,17 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(EventUI))]
     internal class EventUIPatch
     {
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("Awake")]
+        [HarmonyPostfix]
+        static void Awake_Postfix(EventUI __instance)
+        {
+            __instance.instance.AddOnceRecursiveComponent<UIFontUpdater>();
+            var eventChoice = Resources.Load<EventChoiceButton>("Event/Prefab/EventChoiceButton");
+            eventChoice.gameObject.AddOnceRecursiveComponent<UIFontUpdater>();
+        }
+
         [HarmonyTranspiler]
         [HarmonyPatch("GetDependencyIcons")]
         static IEnumerable<CodeInstruction> GetDependencyIconsTranspiler(IEnumerable<CodeInstruction> instructions, MethodBase original)
@@ -26,6 +41,7 @@ namespace VagrusTranslationPatches.Patches
                     yield return instruction;
             }
         }
+
         [HarmonyTranspiler]
         [HarmonyPatch("SelectStep")]
         static IEnumerable<CodeInstruction> SelectStepTranspiler(IEnumerable<CodeInstruction> instructions, MethodBase original)

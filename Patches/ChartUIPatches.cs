@@ -15,12 +15,16 @@ namespace VagrusTranslationPatches.Patches
         public static void Awake_Postfix(ChartUI __instance)
         {
             var poiboxPrefab = Resources.Load<GameObject>("Chart/Prefab/POIBox");
-            if (poiboxPrefab != null && !poiboxPrefab.HasComponent<UIFontUpdater>())
-            {
-                poiboxPrefab.AddComponent<UIFontUpdater>();
-            }
+            poiboxPrefab.AddIfNotExistComponent<UIFontUpdater>();
+
+            var priceHistoryRowPrefab = Resources.Load<GameObject>("Chart/Prefab/PriceHistoryRow");
+            priceHistoryRowPrefab.AddIfNotExistComponent<UIFontUpdater>();
+
+            var priceHistoryBoxPrefab = Resources.Load<GameObject>("Chart/Prefab/PriceHistoryBox");
+            priceHistoryBoxPrefab.AddIfNotExistComponent<UIFontUpdater>();
 
         }
+
 
         [HarmonyPatch("GetNodeDistance")]
         [HarmonyPostfix]
@@ -57,7 +61,7 @@ namespace VagrusTranslationPatches.Patches
                     return;
                 }
             }
-            ___travelDistance = (num2 == num) ? num2 + "-" : "" + num.FormatNumberByNomen("day") + " " + "of travel".FromDictionary();
+            ___travelDistance = ((num2 != num) ? num2 + "-" : "") + num.FormatNumberByNomen("day") + " " + "of travel".FromDictionary();
             __result = ___travelDistance;
         }
 

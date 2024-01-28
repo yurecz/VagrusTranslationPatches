@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using TMPro;
+using UnityEngine;
+using Vagrus;
 using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
@@ -7,7 +9,13 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(CalendarUI))]
     internal class CalendarUIPatch
     {
-        [HarmonyPatch("Refresh")]
+        [HarmonyPatch("LoadResources")]
+        [HarmonyPostfix]
+        public static void LoadResources_Postfix(BookUI __instance, GameObject ___prefab)
+        {
+            ___prefab.AddIfNotExistComponent<UIFontUpdater>();
+        }
+            [HarmonyPatch("Refresh")]
         [HarmonyPostfix]
         public static void Refresh_Postfix(CalendarUI __instance)
         {

@@ -425,7 +425,7 @@ namespace VagrusTranslationPatches.Patches
             if (text.Length == 0 && taskInstance.passenger != null && taskInstance.passenger.GetPassengers() > 0)
             {
                 MethodInfo methodInfo = typeof(BookUI).GetMethod("GetPassengerCardDescription", BindingFlags.NonPublic | BindingFlags.Instance);
-                var parameters = new object[] { card, taskInstance };
+                var parameters = new object[] { taskInstance,card };
                 text = (string)methodInfo.Invoke(__instance, parameters);
             }
             __result = text;

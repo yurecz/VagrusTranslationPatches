@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using System.Security.Cryptography;
 using UnityEngine;
 using VagrusTranslationPatches.Utils;
 
@@ -40,6 +41,12 @@ namespace VagrusTranslationPatches.Patches
                         __result = template.Replace("%type%", caravan.GetBeastType().ToString().FromDictionary());
                     }
                     break;
+                case Prop.Money:
+                    {
+                        caravan.MoneyToCurrency(out var changer, out var lyrg, out var bross);
+                        __result = bross.FormatNumberByNomen("bross") + " "+lyrg.FormatNumberByNomen("lyrg") + " " + changer.FormatNumberByNomen("changer");
+                        break;
+                    }
 
             }
         }

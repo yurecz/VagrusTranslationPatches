@@ -23,8 +23,9 @@ namespace VagrusTranslationPatches.Patches
             var tooltip = Traverse.Create(__instance).Field("tooltip").GetValue() as Tooltip;
             for (int i = 1; i <= 3; i++)
             {
+                string text = "";
                 Impact impact = Impact.FindByName(CampUI.game.camp.campMode.ToString() + "Camp" + i.ToString());
-                string text = CampUI.game.camp.GetDefenceDescription(impact.GetDescription(), i, true);
+                text = CampUI.game.camp.GetDefenceDescription(impact.GetDescription(), i, true);
                 int defenceCost = CampUI.game.camp.GetDefenceCost(i);
                 if (defenceCost > 0)
                 {
@@ -41,31 +42,31 @@ namespace VagrusTranslationPatches.Patches
                 int guardCrewForRate = TweakFunctions.GetGuardCrewForRate(TweakFunctions.GetGeneralCampRequiredGuardRate(i, false));
                 int num = ((i == 1) ? 0 : TweakFunctions.GetGuardCrewForRate(TweakFunctions.GetGeneralCampRequiredGuardRate(i, true)));
                 int property = CampUI.game.caravan.GetProperty(Prop.CrewGuard, true);
-                bool flag = TweakFunctions.IsGeneralCampEnabled(i, false);
-                bool flag2 = TweakFunctions.IsGeneralCampEnabled(i, true);
+                bool isGeneralCampEnabled = TweakFunctions.IsGeneralCampEnabled(i, false);
+                bool isGeneralCampEnabledWithVigor = TweakFunctions.IsGeneralCampEnabled(i, true);
                 string text2 = string.Concat(new string[]
                 {
                 "<color=",
-                flag ? Tooltip.green : Tooltip.red,
+                isGeneralCampEnabled ? Tooltip.green : Tooltip.red,
                 ">",
                 guardCrewForRate.ToString(),
                 "</color>"
                 });
-                string text3 = (flag ? "" : string.Concat(new string[]
+                string text3 = (isGeneralCampEnabled ? "" : string.Concat(new string[]
                 {
-                " or <color=",
-                flag2 ? Tooltip.green : Tooltip.red,
+                " "+"or".FromDictionary()+" <color=",
+                isGeneralCampEnabledWithVigor ? Tooltip.green : Tooltip.red,
                 ">",
                 num.ToString(),
-                "</color> at the cost of ",
+                "</color> " + "at the cost of".FromDictionary() + " ",
                 global::String.ColorizeSigned("-" + GeneralSettings.GeneralCampVigorCost.ToString(), Colorize.Tooltip),
-                " Vigor"
+                " " +"Vigor".FromDictionary()
                 }));
                 if (guardCrewForRate > 0 && dependencyText.Length > 0)
                 {
                     global::String.Replace(ref dependencyText, "%required1%", text2 ?? "");
                     global::String.Replace(ref dependencyText, "%required2%", text3 ?? "");
-                    global::String.Replace(ref dependencyText, "%actual%", "(you have " + property.ToString() + ")");
+                    global::String.Replace(ref dependencyText, "%actual%", "(you have".FromDictionary()+" " + property.ToString() + ")");
                     if (dependencyText.Length > 0 && CampUI.game.camp.campMode == CampMode.General)
                     {
                         text = text + "\n" + dependencyText;

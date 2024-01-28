@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using Vagrus;
 using Vagrus.UI;
+using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
 {
@@ -20,7 +21,10 @@ namespace VagrusTranslationPatches.Patches
         public static void Awake_Postfix()
         {
             TranslationPatchesPlugin.SetGameFixedValues();
+
         }
+
+
 
         [HarmonyPatch("ShowLoadGame")]
         [HarmonyPostfix]

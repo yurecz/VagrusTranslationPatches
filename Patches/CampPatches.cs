@@ -8,12 +8,35 @@ namespace VagrusTranslationPatches.Patches
     internal class CampPatches
     {
 
+        [HarmonyPatch(typeof(Camp), "DefenceMansioText")]
+        [HarmonyPostfix]
+        public static void DefenceMansioText_Postfix(Camp __instance, ref string __result, int defence)
+        {
+            if (!__instance.IsSettlementCamp())
+            {
+                __result = "";
+                return;
+            }
+            string result = "";
+            int defenceCost = __instance.GetDefenceCost(defence);
+            int restLevel = Game.game.caravan.curNode.GetRestLevel();
+            if (__instance.campMode == CampMode.Settlement && restLevel < defence)
+            {
+                result = "\n\n<i><color=" + Tooltip.red + ">"+"Not an available option in this Mansio".FromDictionary()+"</color></i>";
+            }
+            else if (Game.game.caravan.GetMoney() < defenceCost)
+            {
+                result = "\n\n<i><color=" + Tooltip.red + ">"+"Not enough coins".FromDictionary()+".</color></i>";
+            }
+            __result = result;
+        }
+
         [HarmonyPatch(typeof(Camp), "DefenceOrderVirtualImpact")]
         [HarmonyPrefix]
         public static bool DefenceOrderVirtualImpact(Camp __instance, int defmode, bool show, out string guardposting, out string vigor)
         {
             guardposting = "";
-            vigor = ((defmode == 2) ? Game.FromDictionary("No bonuses; No penalties") : "");
+            vigor = ((defmode == 2) ? "No bonuses; No penalties".FromDictionary() : "");
             if (__instance.IsSettlementCamp())
             {
                 return false;
@@ -32,7 +55,7 @@ namespace VagrusTranslationPatches.Patches
                     PropQty propQty = new PropQty(Prop.Vigor, -GeneralSettings.GeneralCampVigorCost);
                     if (show)
                     {
-                        guardposting = "<b>" + Game.FromDictionary("Post " + ((defmode == 3) ? "extra " : "") + "guards (insufficient armed crew)") + "</b>";
+                        guardposting = "<b>" + ("Post " + ((defmode == 3) ? "extra " : "") + "guards (insufficient armed crew)").FromDictionary() + "</b>";
                         vigor = global::String.Sign(propQty.qty, true) + " " + BaseUI.game.caravan.FindProperty(propQty.prop).GetTitle(false);
                         return false;
                     }
@@ -43,7 +66,7 @@ namespace VagrusTranslationPatches.Patches
                 {
                     if (show)
                     {
-                        guardposting = "<b>" + Game.FromDictionary("Post " + ((defmode == 3) ? "extra " : "") + "guards (sufficient armed crew)") + "</b>";
+                        guardposting = "<b>" + ("Post " + ((defmode == 3) ? "extra " : "") + "guards (sufficient armed crew)").FromDictionary() + "</b>";
                         return false;
                     }
                     return false;
@@ -52,7 +75,7 @@ namespace VagrusTranslationPatches.Patches
                 {
                     if (show)
                     {
-                        guardposting = "<b>" + Game.FromDictionary("Post " + ((defmode == 3) ? "extra " : "") + "guards") + "</b>";
+                        guardposting = "<b>" + ("Post " + ((defmode == 3) ? "extra " : "") + "guards").FromDictionary() + "</b>";
                         return false;
                     }
                     return false;
@@ -62,7 +85,7 @@ namespace VagrusTranslationPatches.Patches
             {
                 if (show)
                 {
-                    guardposting = "<b>" + Game.FromDictionary("Unable to post guards") + "</b>";
+                    guardposting = "<b>" + "Unable to post guards".FromDictionary() + "</b>";
                     return false;
                 }
                 return false;
@@ -72,7 +95,7 @@ namespace VagrusTranslationPatches.Patches
                 PropQty propQty2 = new PropQty(Prop.Vigor, GeneralSettings.GeneralCampVigorCost);
                 if (show)
                 {
-                    guardposting = "<b>" + Game.FromDictionary("Post no guards") + "</b>";
+                    guardposting = "<b>" + "Post no guards".FromDictionary() + "</b>";
                     vigor = global::String.Sign(propQty2.qty, true) + " " + BaseUI.game.caravan.FindProperty(propQty2.prop).GetTitle(false);
                     return false;
                 }
@@ -83,7 +106,7 @@ namespace VagrusTranslationPatches.Patches
             {
                 if (show)
                 {
-                    guardposting = "<b>" + Game.FromDictionary("Post no guards") + "</b>";
+                    guardposting = "<b>" + "Post no guards".FromDictionary() + "</b>";
                     return false;
                 }
                 return false;

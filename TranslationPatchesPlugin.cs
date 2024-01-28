@@ -14,15 +14,9 @@ namespace VagrusTranslationPatches
     [BepInPlugin(MyGUID, PluginName, VersionString)]
     public class TranslationPatchesPlugin : BaseUnityPlugin
     {
-        // Mod specific details. MyGUID should be unique, and follow the reverse domain pattern
-        // e.g.
-        // com.mynameororg.pluginname
-        // Version should be a valid version string.
-        // e.g.
-        // 1.0.0
         private const string MyGUID = "ru.Vagrus.TranslationPatches";
         private const string PluginName = "TranslationPatches";
-        private const string VersionString = "0.3.0";
+        private const string VersionString = "0.4.0";
 
         // Config entry key strings
         // These will appear in the config file created by BepInEx and can also be used
@@ -72,7 +66,10 @@ namespace VagrusTranslationPatches
             KeyboardShortcutRereadTranslationFiles.SettingChanged += ConfigSettingChanged;
 
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
-            Harmony.PatchAll();          
+            Harmony.PatchAll();
+
+            GameObject patchObjectGO = new GameObject("PatchObject");
+            PatchObject patchObject = patchObjectGO.AddComponent<PatchObject>();
 
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
 
@@ -186,7 +183,11 @@ namespace VagrusTranslationPatches
             NewsTweak.Fresh3Title = "Outdated".FromDictionary();
 
             NewsTweak.Fresh4Title = "Very Old".FromDictionary();
-        }
+
+            HuntingTweak.HuntingForagingTitle = "Acquire Supplies".FromDictionary();
+
+            HuntingTweak.OddJobsTitle = "Odd Jobs".FromDictionary();
+    }
 
     }
 }

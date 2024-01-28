@@ -49,6 +49,9 @@ namespace VagrusTranslationPatches.MonoBehaviours
         private void FindAllText()
         {
             keyUIPairs.Clear();
+
+            TranslationPatchesPlugin.Log.LogInfo("Registered UIObjectTranslator on " + base.gameObject.GetFullName());
+            
             TextMeshProUGUI[] componentsInChildren = base.transform.GetComponentsInChildren<TextMeshProUGUI>(includeInactive: true);
             foreach (TextMeshProUGUI textMeshProUGUI in componentsInChildren)
             {

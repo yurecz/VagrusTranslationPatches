@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
@@ -7,9 +8,17 @@ namespace VagrusTranslationPatches.Patches
     internal class ScoutUIPatches
     {
 
+        [HarmonyPatch("Awake")]
+        [HarmonyPostfix]
+        public static void Awake_Postfix(ScoutUI __instance, GameObject ___AutoContentHolder)
+        {
+
+        }
+        
+        
         [HarmonyPatch("GetFilterTooltip")]
         [HarmonyPostfix]
-        public static void GetFilterTooltip_Postfix(ScoutUI __instance, string __result, ScoutResultFilter type, bool interactable = true)
+        public static void GetFilterTooltip_Postfix(ScoutUI __instance, ref string __result, ScoutResultFilter type, bool interactable = true)
         {
                 if (!interactable)
                 {

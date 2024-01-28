@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Vagrus;
 using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
@@ -9,7 +11,22 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(CrewUI))]
     internal class CrewUIPatches
     {
-        [HarmonyPatch("FindComponents")]
+        [HarmonyPatch("LoadResources")]
+        [HarmonyPostfix]
+        public static void LoadResources_Postfix(CrewUI __instance, GameObject ___passengerPrefab, Transform ___crewDetailsRowPrefab,Transform ___effectRowPrefab)
+        {
+            ___passengerPrefab.AddIfNotExistComponent<UIFontUpdater>();
+            ___crewDetailsRowPrefab.gameObject.AddIfNotExistComponent<UIFontUpdater>();
+            ___effectRowPrefab.gameObject.AddIfNotExistComponent<UIFontUpdater>();
+            var effectRowPrefab = Resources.Load("baseui/prefabs/EnduringEffectsRow") as GameObject;
+            var crewDetailsRowPrefab = Resources.Load("baseui/prefabs/CrewDetailsRow") as GameObject;
+            crewDetailsRowPrefab.AddIfNotExistComponent<UIFontUpdater>();
+            var passengerPrefab = Resources.Load("UI/Prefab/Passenger") as GameObject;
+            passengerPrefab.AddIfNotExistComponent<UIFontUpdater>();
+        }
+
+
+            [HarmonyPatch("FindComponents")]
         [HarmonyPostfix]
         public static void FindComponents_Postfix(CrewUI __instance)
         {
