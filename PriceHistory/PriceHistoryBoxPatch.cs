@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -29,6 +31,7 @@ namespace VagrusTranslationPatches.PriceHistory
         private static void ToggleDisplayPrice(int idx)
         {
             displayPriceToggle = idx;
+            BuildPriceHistoryRows();
         }
 
         private static void ToggleSortByGroup(int idx)
@@ -36,8 +39,20 @@ namespace VagrusTranslationPatches.PriceHistory
             sortByToggle = idx;
             FieldInfo field = typeof(PriceHistoryBox).GetField("leftSettlementIdx", BindingFlags.NonPublic | BindingFlags.Instance);
             field.SetValue(priceHistoryBoxInstance,0);
+            BuildPriceHistoryRows();
         }
 
+        private static void ToggleCustomGroup(int idx)
+        {
+            PriceHistoryBox.collectionMode = idx != 1;
+            BuildPriceHistoryRows();
+        }
+
+        private static void ToggleCollectionGroup(int collection)
+        {
+            PriceHistoryBox.collectionIdx = collection - 1;
+            BuildPriceHistoryRows();
+        }
         public static void ExtSearch(string search)
         {
             textInput.UpdateText(search);
@@ -47,6 +62,16 @@ namespace VagrusTranslationPatches.PriceHistory
         private static void FilterGoods(string search)
         {
             BuildPriceHistoryRows();
+        }
+
+        [HarmonyPatch("SetFirstRowSettlement")]
+        [HarmonyPostfix]
+        public static void SetFirstRowSettlement(Node node)
+        {
+            if (!PriceHistoryBox.collectionMode)
+            {
+                BuildPriceHistoryRows();
+            }
         }
 
         [HarmonyPatch("IsDifferencePrices")]
@@ -67,7 +92,10 @@ namespace VagrusTranslationPatches.PriceHistory
             ButtonUI ___buttonDistance,
             ButtonUI ___buttonDate,
             ButtonUI ___buttonName,
-            GameObject ___instance,
+            ButtonUI ___buttonSorted,
+            ButtonUI ___buttonCustom,
+            List<ButtonUI> ___buttonCollections,
+        GameObject ___instance,
             List<PriceHistoryRow> ___priceHistoryRows,
             Scroller ___scroller)
         {
@@ -80,7 +108,9 @@ namespace VagrusTranslationPatches.PriceHistory
             var buttonDate = ___buttonDate;
             var buttonName = ___buttonName;
             var gamObject = ___instance;
-
+            var buttonSorted = ___buttonSorted;
+            var buttonCustom = ___buttonCustom;
+            var buttonCollections = ___buttonCollections;
 
             buttonFull.Select(displayPriceToggle == 0);
             buttonFull.SetClickMethod(ToggleDisplayPrice, 0);
@@ -111,6 +141,13 @@ namespace VagrusTranslationPatches.PriceHistory
             buttonDate.Select(sortByToggle == 2);
             buttonDate.SetClickMethod(ToggleSortByGroup, 2);
 
+            buttonSorted.SetClickMethod(ToggleCustomGroup, 1);
+            buttonCustom.SetClickMethod(ToggleCustomGroup, 2);
+            for (int i = 0; i < buttonCollections.Count(); i++) { 
+                var buttonCollection = buttonCollections[i];
+                buttonCollection.SetClickMethod(ToggleCollectionGroup, i+1);
+            }   
+
             sortBySellProfitButton = ___headerSortBy.transform.Find("SortBySellProfit").GetComponent<ButtonUI>();
             sortBySellProfitButton.SetToggleMode(toggleMode: true, "SortByGroup");
             sortBySellProfitButton.SetClickMethod(ToggleSortByGroup, 3);
@@ -134,23 +171,40 @@ namespace VagrusTranslationPatches.PriceHistory
             List<Goods> list = new List<Goods>();
             foreach (Goods item2 in AirTableItem<Goods>.GetAll())
             {
-                if (!item2.IsCollection())
+                if (!item2.IsCollection() && (PriceHistoryBox.goodsCatGroup == GoodsCatGroup.All || item2.GetCategoryGroup() == PriceHistoryBox.goodsCatGroup))
                 {
                     list.Add(item2);
                 }
             }
 
-            
-            list.Sort((Goods a, Goods b) => a.GetName().CompareTo(b.GetName()));
             list = list.Where((Goods a) => Regex.IsMatch(a.GetName(),textInput.GetText())).ToList();
+
+            list.Sort((Goods a, Goods b) => a.GetName().CompareTo(b.GetName()));
+
+            var firstColumnSettlement = __instance.firstRowSettlement;
+            var settlementList = __instance.GetAvailableSettlements(firstColumnSettlement); ;
+
+            if (sortByToggle == 3)
+            {
+                list.Sort((Goods a, Goods b) =>
+                {
+                    return -1 * settlementList.MaxProfitFrom(firstColumnSettlement, a).CompareTo(settlementList.MaxProfitFrom(firstColumnSettlement, b));
+                });
+            }
+            else if (sortByToggle == 4)
+            {
+                list.Sort((Goods a, Goods b) =>
+                {
+                    return -1 * settlementList.MaxProfitTo(firstColumnSettlement, a).CompareTo(settlementList.MaxProfitTo(firstColumnSettlement, b));
+                });
+
+            }
+
             foreach (Goods item3 in list)
             {
-                if (PriceHistoryBox.goodsCatGroup == GoodsCatGroup.All || item3.GetCategoryGroup() == PriceHistoryBox.goodsCatGroup)
-                {
                     PriceHistoryRow item = CreatePriceHistoryRow(item3, num);
                     ___priceHistoryRows.Add(item);
                     num++;
-                }
             }
             UpdateAdjust();
             ___scroller.ScrollToTop();
@@ -160,45 +214,60 @@ namespace VagrusTranslationPatches.PriceHistory
 
         [HarmonyPatch("UpdateSettlementList")]
         [HarmonyPrefix]
-        public static bool UpdateSettlementList(PriceHistoryBox __instance, ref List<Node> ___settlementList, List<PriceHistoryRow> ___priceHistoryRows)
+        public static bool UpdateSettlementList_Prefix(PriceHistoryBox __instance, ref List<Node> ___settlementList, ref List<PriceHistoryRow> ___priceHistoryRows)
         {
+
+            var priceHistoryRows = ___priceHistoryRows;
+
             if (PriceHistoryBox.collectionMode)
             {
                 return false; 
             }
-            ___settlementList = __instance.GetAvailableSettlements(__instance.firstRowSettlement);
+
             var firstColumnSettlement = __instance.firstRowSettlement;
+            var settlementList = __instance.GetAvailableSettlements(firstColumnSettlement); ;
+
             if (sortByToggle == 0)
             {
                 if (Game.game.caravan.chartUI != null && Game.game.caravan.chartUI.priceHistoryBox != null)
                 {
-                    ___settlementList.Sort((Node a, Node b) => a.GetMovementDistanceFrom(firstColumnSettlement, Game.game.caravan.chartUI.priceHistoryBox.realmGateFactorButtonOn).CompareTo(b.GetMovementDistanceFrom(firstColumnSettlement, Game.game.caravan.chartUI.priceHistoryBox.realmGateFactorButtonOn)));
+                    settlementList.Sort((Node a, Node b) => a.GetMovementDistanceFrom(firstColumnSettlement, Game.game.caravan.chartUI.priceHistoryBox.realmGateFactorButtonOn).CompareTo(b.GetMovementDistanceFrom(firstColumnSettlement, Game.game.caravan.chartUI.priceHistoryBox.realmGateFactorButtonOn)));
                 }
             }
             else if (sortByToggle == 1)
             {
-                ___settlementList.Sort((Node a, Node b) => a.GetName().CompareTo(b.GetName()));
+                settlementList.Sort((Node a, Node b) => a.GetName().CompareTo(b.GetName()));
             }
             else if (sortByToggle == 2)
             {
-                ___settlementList.Sort((Node a, Node b) => b.GetLastKnownMarketPriceDay().CompareTo(a.GetLastKnownMarketPriceDay()));
+                settlementList.Sort((Node a, Node b) => b.GetLastKnownMarketPriceDay().CompareTo(a.GetLastKnownMarketPriceDay()));
             }
             else if (sortByToggle == 3)
             {
-                ___settlementList.Sort((Node a, Node b) =>
+                //foreach(var settlement in settlementList)
+                //{
+                //    TranslationPatchesPlugin.Log.LogWarning($"Sorting By Sell Profit {settlement.GetName()}: { priceHistoryRows.MaxProfit(settlement, firstColumnSettlement)}");
+                //}
+                settlementList.Sort((Node a, Node b) =>
                 {
-                    return -1*___priceHistoryRows.MaxProfit(a, firstColumnSettlement).CompareTo(___priceHistoryRows.MaxProfit(b, firstColumnSettlement));
+                    return -1* priceHistoryRows.MaxProfit(a, firstColumnSettlement).CompareTo(priceHistoryRows.MaxProfit(b, firstColumnSettlement));
                 });
                                         
             }
             else if (sortByToggle == 4)
             {
-                ___settlementList.Sort((Node a, Node b) =>
+                //foreach (var settlement in settlementList)
+                //{
+                //    TranslationPatchesPlugin.Log.LogWarning($"Sorting By Buy Profit {settlement.GetName()}: {priceHistoryRows.MaxProfit(firstColumnSettlement, settlement)}");
+                //}
+                settlementList.Sort((Node a, Node b) =>
                 {
-                    return -1*___priceHistoryRows.MaxProfit(firstColumnSettlement, a).CompareTo(___priceHistoryRows.MaxProfit(firstColumnSettlement, b));
+                    return -1* priceHistoryRows.MaxProfit(firstColumnSettlement, a).CompareTo(priceHistoryRows.MaxProfit(firstColumnSettlement, b));
                 });
 
             }
+
+            ___settlementList = settlementList;
             return false;
         }
 
@@ -212,6 +281,13 @@ namespace VagrusTranslationPatches.PriceHistory
         private static void BuildPriceHistoryRows()
         {
             MethodInfo methodInfo = typeof(PriceHistoryBox).GetMethod("BuildPriceHistoryRows", BindingFlags.NonPublic | BindingFlags.Instance);
+            var parameters = new object[] { };
+            methodInfo.Invoke(priceHistoryBoxInstance, parameters);
+        }
+
+        private static void UpdateMatrix()
+        {
+            MethodInfo methodInfo = typeof(PriceHistoryBox).GetMethod("UpdateMatrix", BindingFlags.NonPublic | BindingFlags.Instance);
             var parameters = new object[] { };
             methodInfo.Invoke(priceHistoryBoxInstance, parameters);
         }

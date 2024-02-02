@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using Vagrus;
+using VagrusTranslationPatches.MonoBehaviours;
 
 namespace VagrusTranslationPatches.Utils
 {
@@ -33,7 +38,7 @@ namespace VagrusTranslationPatches.Utils
         {
             if (gamObject != null && gamObject.HasComponent<T>())
             {
-                Object.Destroy(gamObject.GetComponent<T>());
+                UnityEngine.Object.DestroyImmediate(gamObject.GetComponent<T>());
             }
         }
 
@@ -43,7 +48,7 @@ namespace VagrusTranslationPatches.Utils
 
             if (component != null)
             {
-                Object.Destroy(component);
+                UnityEngine.Object.DestroyImmediate(component);
             }
 
             foreach (Transform child in gamObject.transform)
@@ -88,6 +93,56 @@ namespace VagrusTranslationPatches.Utils
         {
             var rectTransform = gameObject.GetComponent<RectTransform>();
             rectTransform.RestoreRectTransform(gameObjectRef);
+        }
+        public static void UpdatePrefabFonts(this GameObject prefab)
+        {
+            prefab.RemoveEverywhereComponent<UIFontUpdater>();
+            prefab.AddIfNotExistComponent<UIPrefabFontUpdater>();
+            FindAllTextAndChangeFontInPrefab(prefab);
+        }
+
+        public static void UpdatePrefabFontsAndTranslation(this GameObject prefab)
+        {
+            prefab.RemoveEverywhereComponent<UIFontUpdater>();
+            prefab.RemoveEverywhereComponent<UIObjectTranslator>();
+            prefab.RemoveEverywhereComponent<UITranslator>();
+            prefab.RemoveEverywhereComponent<UIElementTranslator>();
+            prefab.AddIfNotExistComponent<UIPrefabObjectTranslator>();
+            FindAllTextAndChangeFontAndTranslationInPrefab(prefab);
+        }
+
+
+        private static void FindAllTextAndChangeFontInPrefab(GameObject prefab)
+        {
+            TranslationPatchesPlugin.Log.LogMessage($"Updating prefab: {prefab.GetFullName()}");
+
+            var textMeshes = prefab.transform.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var textMesh in textMeshes)
+            {
+                if (!textMesh.gameObject.HasComponent<UIElementTranslator>())
+                    FontUtils.Update(textMesh, null, "UIPrefabFontUpdater");
+            }
+
+            TranslationPatchesPlugin.Log.LogMessage($" Updated prefab: {prefab.GetFullName()} found {textMeshes.Count()} components");
+        }
+
+        private static void FindAllTextAndChangeFontAndTranslationInPrefab(GameObject prefab)
+        {
+            TranslationPatchesPlugin.Log.LogMessage($"Updating prefab: {prefab.GetFullName()}");
+
+            var textMeshes = prefab.transform.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var textMesh in textMeshes)
+            {
+                if (!textMesh.gameObject.HasComponent<UIElementTranslator>())
+                {
+                    textMesh.text = textMesh.text.ToLower().Trim('\n', ' ').FromDictionary();
+                    textMesh.richText = true;
+
+                    FontUtils.Update(textMesh, null, "UIPrefabObjectTranslator");
+                }
+            }
+
+            TranslationPatchesPlugin.Log.LogMessage($" Updated prefab: {prefab.GetFullName()} found {textMeshes.Count()} components");
         }
 
     }

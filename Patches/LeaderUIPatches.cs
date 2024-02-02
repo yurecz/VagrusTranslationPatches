@@ -13,16 +13,16 @@ namespace VagrusTranslationPatches.Patches
         public static void LoadResources_Postfix(LeaderUI __instance)
         {
             var statusRow = Resources.Load("UI/Prefab/StatusRow") as GameObject;
-            statusRow.AddIfNotExistComponent<UIFontUpdater>();
+            statusRow.UpdatePrefabFonts();
 
             var leaderPerkDoubleRow = Resources.Load("UI/Prefab/LeaderPerkDoubleRow") as GameObject;
-            leaderPerkDoubleRow.AddIfNotExistComponent<UIFontUpdater>();
+            leaderPerkDoubleRow.UpdatePrefabFonts();
 
             var leaderPerkSingleRow = Resources.Load("UI/Prefab/LeaderPerkSingleRow") as GameObject;
-            leaderPerkSingleRow.AddIfNotExistComponent<UIFontUpdater>();
+            leaderPerkSingleRow.UpdatePrefabFonts();
 
             var factionThumb = Resources.Load("Leader/Prefab/FactionThumb") as GameObject;
-            factionThumb.AddIfNotExistComponent<UIFontUpdater>();
+            factionThumb.UpdatePrefabFonts();
         }
     }
 }

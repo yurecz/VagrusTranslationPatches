@@ -81,9 +81,17 @@ namespace VagrusTranslationPatches
 
     public struct ReplacementFont
     {
+        public string FontName;
         public TMP_FontAsset FontAsset;
+        public float? FontSize;
+        internal HorizontalAlignmentOptions? HorizontalAlignment;
+        internal VerticalAlignmentOptions? VerticalAlignment;
+        internal float? CharacterSpacing;
+        internal float? WordSpacing;
+        internal float? LineSpacing;
+        internal float? ParagraphSpacing;
+
         public Outline Outline;
         public Underlay Underlay;
-        public string FontName;
     }
 }

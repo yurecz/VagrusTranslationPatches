@@ -98,12 +98,19 @@
   <ItemGroup>
     <Compile Include="FontReplacer\ReplacementFontMapping.cs" />
     <Compile Include="MonoBehaviours\PatchObject.cs" />
+    <Compile Include="MonoBehaviours\UIPrefabObjectTranslator.cs" />
+    <Compile Include="MonoBehaviours\UIPrefabFontUpdater.cs" />
     <Compile Include="MonoBehaviours\UIObjectTranslator.cs" />
     <Compile Include="MonoBehaviours\NarrationComponent.cs" />
+    <Compile Include="Patches\BaseUIExPatches.cs" />
     <Compile Include="Patches\BookUIPatches.cs" />
     <Compile Include="Patches\CaravanPatches.cs" />
     <Compile Include="Patches\CargoEquipmentDataPatches.cs" />
     <Compile Include="Patches\CombatCharacterPatches.cs" />
+    <Compile Include="Patches\CrewCircleDoubleBoxPatches.cs" />
+    <Compile Include="Patches\CrewCombatFightUIPatches.cs" />
+    <Compile Include="Patches\CrewCombatFlagPatches.cs" />
+    <Compile Include="Patches\CrewCombatOpenUIPatches.cs" />
     <Compile Include="Patches\CrewRowPatches.cs" />
     <Compile Include="Patches\EnhancedScrollControllerPatches.cs" />
     <Compile Include="Patches\FactionPatches.cs" />
@@ -120,6 +127,7 @@
     <Compile Include="Patches\LeaderUIPatches.cs" />
     <Compile Include="Patches\LinePatches.cs" />
     <Compile Include="Patches\LoadingScreenPatches.cs" />
+    <Compile Include="Patches\MainMenuUIPatches.cs" />
     <Compile Include="Patches\MarketQtyUIPatches.cs" />
     <Compile Include="Patches\NodePatches.cs" />
     <Compile Include="Patches\PassengerPatches.cs" />
@@ -151,11 +159,13 @@
     <Compile Include="Patches\StickyUIValueDisplayPatches.cs" />
     <Compile Include="Patches\MiniCaravanUIPatches.cs" />
     <Compile Include="Patches\CampUIPatches.cs" />
+    <Compile Include="Patches\StoryUIPatches.cs" />
     <Compile Include="Patches\TaskInstancePatches.cs" />
     <Compile Include="Patches\TooltipPatches.cs" />
     <Compile Include="Patches\Translators.cs" />
     <Compile Include="Patches\TutorialUIPatches.cs" />
     <Compile Include="Patches\TweakFunctionsPatches.cs" />
+    <Compile Include="PrefabUpdater\ResourcesPatches.cs" />
     <Compile Include="PriceHistory\ChartUIPatch.cs" />
     <Compile Include="PriceHistory\PriceHistoryBoxPatch.cs" />
     <Compile Include="PriceHistory\PriceHistoryColumnPatch.cs" />
@@ -170,6 +180,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FontReplacer\FontUtils.cs" />
     <Compile Include="Utils\EventsJSON.cs" />
+    <Compile Include="Utils\Nodes.cs" />
     <Compile Include="Utils\PriceHistoryRows.cs" />
     <Compile Include="Utils\NodeUtils.cs" />
     <Compile Include="Utils\PriceHistoryRowUtils.cs" />

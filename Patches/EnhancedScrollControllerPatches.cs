@@ -17,10 +17,7 @@ namespace VagrusTranslationPatches.Patches
 
             foreach (var prefab in ___CellViewPrefabs)
             {
-                if (!prefab.gameObject.HasComponent<UIFontUpdater>())
-                {
-                    prefab.gameObject.AddComponent<UIFontUpdater>();
-                }
+                prefab.gameObject.UpdatePrefabFonts();                   
             }
         }
     }

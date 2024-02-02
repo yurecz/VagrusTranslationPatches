@@ -15,14 +15,15 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void LoadResources_Postfix(CrewUI __instance, GameObject ___passengerPrefab, Transform ___crewDetailsRowPrefab,Transform ___effectRowPrefab)
         {
-            ___passengerPrefab.AddIfNotExistComponent<UIFontUpdater>();
-            ___crewDetailsRowPrefab.gameObject.AddIfNotExistComponent<UIFontUpdater>();
-            ___effectRowPrefab.gameObject.AddIfNotExistComponent<UIFontUpdater>();
+            ___passengerPrefab.UpdatePrefabFonts();
+            ___crewDetailsRowPrefab.gameObject.UpdatePrefabFonts();
+            ___effectRowPrefab.gameObject.UpdatePrefabFonts();
             var effectRowPrefab = Resources.Load("baseui/prefabs/EnduringEffectsRow") as GameObject;
+            effectRowPrefab.UpdatePrefabFonts();
             var crewDetailsRowPrefab = Resources.Load("baseui/prefabs/CrewDetailsRow") as GameObject;
-            crewDetailsRowPrefab.AddIfNotExistComponent<UIFontUpdater>();
+            crewDetailsRowPrefab.UpdatePrefabFonts();
             var passengerPrefab = Resources.Load("UI/Prefab/Passenger") as GameObject;
-            passengerPrefab.AddIfNotExistComponent<UIFontUpdater>();
+            passengerPrefab.UpdatePrefabFonts();
         }
 
 

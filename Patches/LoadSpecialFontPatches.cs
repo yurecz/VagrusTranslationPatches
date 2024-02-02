@@ -52,14 +52,6 @@ namespace VagrusTranslationPatches.Patches
             return false;
         }
 
-        [HarmonyPatch(typeof(UITranslator), "Start")]
-        [HarmonyPostfix]
-        public static void Start_Postfix(UITranslator __instance)
-        {
-            TranslationPatchesPlugin.Log.LogInfo("Registered UITranslator on " + __instance.gameObject.GetFullName());
-        }
-
-
         [HarmonyPatch(typeof(UIFontUpdater), "OnLanguageChange")]
         [HarmonyPrefix]
         public static bool OnLanguageChange_Prefix(UIFontUpdater __instance)
@@ -125,6 +117,12 @@ namespace VagrusTranslationPatches.Patches
             return false;
         }
 
+        [HarmonyPatch(typeof(UITranslator), "Start")]
+        [HarmonyPostfix]
+        public static void Start_Postfix(UITranslator __instance)
+        {
+            TranslationPatchesPlugin.Log.LogInfo("Registered UITranslator on " + __instance.gameObject.GetFullName());
+        }
 
         [HarmonyPatch(typeof(UITranslator), "TranslateUIElements")]
         [HarmonyPrefix]
@@ -145,7 +143,8 @@ namespace VagrusTranslationPatches.Patches
                     if (Game.Dictionary.TryGetValue(keyUIPair.KeyText.ToLower().Trim('\n', ' '), out var value))
                     {
                         keyUIPair.textMesh.richText = true;
-                        keyUIPair.textMesh.text = (keyUIPair.NoScaling ? value : Game.GetScaledLocalizedText(keyUIPair.textMesh, keyUIPair.KeyText, value));
+                        //keyUIPair.textMesh.text = (keyUIPair.NoScaling ? value : Game.GetScaledLocalizedText(keyUIPair.textMesh, keyUIPair.KeyText, value));
+                        keyUIPair.textMesh.text = keyUIPair.textMesh.text.FromDictionary();
                     }
                     else
                     {
@@ -156,27 +155,20 @@ namespace VagrusTranslationPatches.Patches
             }
             return false;
         }
-        [HarmonyPatch(typeof(UIElementTranslator), "Start")]
-        [HarmonyPostfix]
-        public static void Start_Postfix(UIElementTranslator __instance)
-        {
-            TranslationPatchesPlugin.Log.LogInfo("Registered UIElementTranslator on " + __instance.gameObject.GetFullName());
-        }
 
         [HarmonyPatch(typeof(UIElementTranslator), "Start")]
         [HarmonyPrefix]
         public static void Start_Prefix(UIElementTranslator __instance)
         {
-            if (__instance.textMesh!=null)
+            if (__instance.textMesh != null)
                 Translators.translators.Add(__instance.textMesh, __instance);
         }
 
-        [HarmonyPatch(typeof(UIElementTranslator), "OnDestroy")]
-        [HarmonyPrefix]
-        public static void OnDestroy_Prefix(UIElementTranslator __instance)
+        [HarmonyPatch(typeof(UIElementTranslator), "Start")]
+        [HarmonyPostfix]
+        public static void Start_Postfix(UIElementTranslator __instance)
         {
-            if (__instance.textMesh != null)
-                Translators.translators.Remove(__instance.textMesh);
+            TranslationPatchesPlugin.Log.LogInfo("Registered UIElementTranslator on " + __instance.gameObject.GetFullName());
         }
 
         [HarmonyPatch(typeof(UIElementTranslator), "TranslateUIElement")]
@@ -198,14 +190,24 @@ namespace VagrusTranslationPatches.Patches
                     Debug.LogError("No text template exists with the name: " + keyText);
                 }
                 textMesh.richText = true;
-                textMesh.text = (NoScaling ? textTemplate.GetText() : Game.GetScaledLocalizedText(textMesh, textTemplate.text, textTemplate.GetText()));
+                //textMesh.text = (NoScaling ? textTemplate.GetText() : Game.GetScaledLocalizedText(textMesh, textTemplate.text, textTemplate.GetText()));
+                textMesh.text = textTemplate.GetText();
             }
             else if (Game.Dictionary.TryGetValue(keyText.ToLower().Trim('\n', ' '), out value))
             {
                 textMesh.richText = true;
-                textMesh.text = (NoScaling ? value : Game.GetScaledLocalizedText(textMesh, keyText, value));
+                //textMesh.text = (NoScaling ? value : Game.GetScaledLocalizedText(textMesh, keyText, value));
+                textMesh.text = textMesh.text.FromDictionary();
             }
             return false;
+        }
+
+        [HarmonyPatch(typeof(UIElementTranslator), "OnDestroy")]
+        [HarmonyPrefix]
+        public static void OnDestroy_Prefix(UIElementTranslator __instance)
+        {
+            if (__instance.textMesh != null)
+                Translators.translators.Remove(__instance.textMesh);
         }
     }
 }

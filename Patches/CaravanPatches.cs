@@ -13,8 +13,9 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void Awake_Postfix(Caravan __instance, GameObject ___ScoutUIPrefab)
         {
-            ___ScoutUIPrefab.RemoveIfExistComponent<UIFontUpdater>();
+            ___ScoutUIPrefab.UpdatePrefabFonts();
             ___ScoutUIPrefab.AddIfNotExistComponent<UIObjectTranslator>();
+
         }
 
         [HarmonyPatch("LiberateUpdateCall")]

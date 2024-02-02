@@ -22,9 +22,9 @@ namespace VagrusTranslationPatches.Patches
             
             var prefabPerkSingleRow = Resources.Load("UI/Prefab/PerkSingleRow") as GameObject;
 
-            if (prefabPerkSingleRow != null && !prefabPerkSingleRow.HasComponent<UIFontUpdater>())
+            if (prefabPerkSingleRow != null)
             {
-                prefabPerkSingleRow.AddComponent<UIFontUpdater>();
+                prefabPerkSingleRow.UpdatePrefabFonts();
             }
         }
 

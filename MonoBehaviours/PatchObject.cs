@@ -46,7 +46,7 @@ namespace VagrusTranslationPatches
             }
         }
 
-        public static IEnumerator FindAllTextAndChangeFont(UIFontUpdater instance)
+        private static IEnumerator FindAllTextAndChangeFont(UIFontUpdater instance)
         {
             if (instance == null) yield break;
             var keyUIPairs = Traverse.Create(instance).Field("keyPairs").GetValue() as List<UITranslator.KeyUIPair>;
@@ -66,7 +66,6 @@ namespace VagrusTranslationPatches
                             textMesh = textMesh,
                             firstFont = textMesh.font
                         });
-                        //TranslationPatchesPlugin.Log.LogMessage($"Called by: {instance.GetHashCode()}");
                         FontUtils.Update(textMesh, null, "UIFontUpdater");
                     }
 

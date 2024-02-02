@@ -13,7 +13,7 @@ namespace VagrusTranslationPatches.Utils
             string formattedText;
             if (last2Digit > 4 && last2Digit <= 20) 
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen + "s")}";
+                formattedText = $"{number} {Game.FromDictionary(nomen + "5") ?? Game.FromDictionary(nomen + "s")}";
             }
             else if (lastDigit == 1)
             {
@@ -25,7 +25,7 @@ namespace VagrusTranslationPatches.Utils
             }
             else
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen + "s")}";
+                formattedText = $"{number} {Game.FromDictionary(nomen + "5") ?? Game.FromDictionary(nomen + "s")}";
             }
 
             return formattedText.ToLower();

@@ -24,6 +24,8 @@ namespace VagrusTranslationPatches.Utils
                 }
             }
 
+            //TranslationPatchesPlugin.Log.LogWarning($" profit from {source.GetName()} to {target.GetName()}:" + maxProfit);
+
             return maxProfit;
         }
     }

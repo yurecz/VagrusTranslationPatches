@@ -16,6 +16,7 @@ namespace VagrusTranslationPatches.Utils
             if (!string.IsNullOrEmpty(str) && showWarning && text == str)
             {
                 TranslationPatchesPlugin.Log.LogWarning("Missing dictionary.csv translation for:" + str);
+                return str;
             }
             return text;
         }

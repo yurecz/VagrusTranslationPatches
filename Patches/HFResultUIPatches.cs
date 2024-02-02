@@ -13,8 +13,8 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void Awake_Postfix(HFResultUI __instance, GameObject ___prefab)
         {
-            ___prefab.AddIfNotExistComponent<UIFontUpdater>();
-            HFResultUI.goodsPrefab.AddIfNotExistComponent<UIFontUpdater>();
+            ___prefab.UpdatePrefabFonts();
+            HFResultUI.goodsPrefab.UpdatePrefabFonts();
         }
     }
 }

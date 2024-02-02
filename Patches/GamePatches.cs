@@ -20,8 +20,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void Awake_Postfix()
         {
-            TranslationPatchesPlugin.SetGameFixedValues();
-
+           //TranslationPatchesPlugin.SetGameFixedValues();
         }
 
 

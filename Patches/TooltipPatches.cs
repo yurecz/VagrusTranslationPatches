@@ -13,7 +13,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void Awake_Postfix(Tooltip __instance, GameObject ___prefab)
         {
-            ___prefab.AddIfNotExistComponent<UIFontUpdater>();
+            ___prefab.UpdatePrefabFonts();
         }
     }
 }

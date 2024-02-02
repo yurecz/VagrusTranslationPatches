@@ -3,6 +3,12 @@ using Vagrus.Data;
 using System.IO;
 using VagrusTranslationPatches.Utils;
 using Newtonsoft.Json;
+using UnityEngine;
+using System.Collections;
+using System;
+using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace VagrusTranslationPatches.Patches
 {
@@ -17,6 +23,23 @@ namespace VagrusTranslationPatches.Patches
         public static void LoadLocalization_Postfix()
         {
             TranslationPatchesPlugin.SetGameFixedValues();
+        }
+
+        [HarmonyPatch("LoadAsync")]
+        [HarmonyPostfix]
+        public static void LoadAsync_Postfix(ref IEnumerator __result, Action onLoadedCallback = null, Action<float> progressUpdater = null)
+        {
+
+            var myEnumerator = new SimplePostfixEnumerator() { enumerator = __result, progressUpdater = progressUpdater };
+            myEnumerator.actions.Add(() =>
+            {
+                var dropDownButtonPrefab = Resources.Load<GameObject>("UI/Buttons/Prefab/DropDownButton");
+                var fieldInfo = typeof(DropDownEntry).GetField("buttonPrefab", BindingFlags.NonPublic | BindingFlags.Static);
+                fieldInfo.SetValue(null, dropDownButtonPrefab);
+                dropDownButtonPrefab.UpdatePrefabFonts();
+            });
+
+            __result = myEnumerator.GetEnumerator();
         }
 
         [HarmonyPatch(nameof(PoolLoader.LoadEventTranslationFromFile))]
@@ -43,6 +66,30 @@ namespace VagrusTranslationPatches.Patches
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public class SimplePostfixEnumerator : IEnumerable
+    {
+        public IEnumerator enumerator;
+        public List<Action> actions = new List<Action>();
+        public Action<float> progressUpdater;
+        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+        public IEnumerator GetEnumerator()
+        {
+            // you can call "action" at any time here but you need to call MoveNext until it returns false
+            while (enumerator!=null && enumerator.MoveNext())
+            {
+                yield return enumerator.Current;
+            } ;
+
+            int i = 0;
+            foreach (var action in actions)
+            {
+                i++;
+                progressUpdater(i / actions.Count());
+                yield return action;
             }
         }
     }

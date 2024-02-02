@@ -98,6 +98,32 @@ namespace VagrusTranslationPatches
                         string targetRegEx = (string)replacementFontFile["TargetRegEx"];
                         if (!string.IsNullOrEmpty(targetRegEx)) replacementRecords.TargetRegEx = targetRegEx;
 
+                        replacementRecords.ReplacementFont.FontSize = (float?)replacementFontFile["FontSize"];
+                        replacementRecords.ReplacementFont.LineSpacing = (float?)replacementFontFile["LineSpacing"];
+                        replacementRecords.ReplacementFont.WordSpacing = (float?)replacementFontFile["WordSpacing"];
+                        replacementRecords.ReplacementFont.ParagraphSpacing = (float?)replacementFontFile["ParagraphSpacing"];
+                        replacementRecords.ReplacementFont.CharacterSpacing = (float?)replacementFontFile["CharacterSpacing"];
+
+                        if (Enum.TryParse<HorizontalAlignmentOptions>(replacementFontFile["HorizontalAlignment"]?.ToString() ?? "", out HorizontalAlignmentOptions resultH))
+                        {
+                            replacementRecords.ReplacementFont.HorizontalAlignment = resultH;
+                        }
+                        else
+                        {
+                            replacementRecords.ReplacementFont.HorizontalAlignment = null;
+                        }
+
+                        if (Enum.TryParse<VerticalAlignmentOptions>(replacementFontFile["VerticalAlignment"]?.ToString() ?? "", out VerticalAlignmentOptions resultV))
+                        {
+                            replacementRecords.ReplacementFont.VerticalAlignment = resultV;
+                        }
+                        else
+                        {
+                            replacementRecords.ReplacementFont.VerticalAlignment = null;
+                        }
+
+
+
                         var outline = replacementFontFile["Outline"];
                         if (outline != null)
                         {
@@ -138,15 +164,23 @@ namespace VagrusTranslationPatches
             var fullName = textMesh.gameObject.GetFullName();
             var name = callerName + "=>" + fullName;
 
-            TranslationPatchesPlugin.Log.LogMessage($"Full path: {name}");
-            TranslationPatchesPlugin.Log.LogMessage($"Original font: {textMesh.font.name}");
-            TranslationPatchesPlugin.Log.LogMessage(textMesh.text);
+            TranslationPatchesPlugin.Log.LogMessage($" Full path: {name}");
+            TranslationPatchesPlugin.Log.LogMessage($" Original font: {textMesh.font.name}");
+            TranslationPatchesPlugin.Log.LogMessage(" " + textMesh.text);
 
             var fontName = textMesh.font.name;
             if (FindFont(fontName, fullName, out var replacementFont))
             {
-                TranslationPatchesPlugin.Log.LogMessage($"Replacement font: {replacementFont.FontName }");
-                if (replacementFont.FontAsset != textMesh.font)
+                TranslationPatchesPlugin.Log.LogMessage($" Replacement font: {replacementFont.FontName }");
+                if (replacementFont.FontAsset != textMesh.font
+                    || replacementFont.FontSize != textMesh.fontSize
+                    || replacementFont.HorizontalAlignment != textMesh.horizontalAlignment
+                    || replacementFont.VerticalAlignment != textMesh.verticalAlignment
+                    || replacementFont.WordSpacing != textMesh.wordSpacing
+                    || replacementFont.LineSpacing != textMesh.lineSpacing
+                    || replacementFont.CharacterSpacing != textMesh.characterSpacing
+                    || replacementFont.ParagraphSpacing != textMesh.paragraphSpacing
+                    )
                 {
                     var originalParameters = PreserveParameters(textMesh);
 
@@ -154,6 +188,41 @@ namespace VagrusTranslationPatches
 
                     RestoreParameters(textMesh, originalParameters);
                     
+                    if (replacementFont.FontSize != null)
+                    {
+                        textMesh.fontSize = replacementFont.FontSize.Value;
+                    }
+
+                    if (replacementFont.HorizontalAlignment != null)
+                    {
+                        textMesh.horizontalAlignment = replacementFont.HorizontalAlignment.Value;
+                    }
+
+                    if (replacementFont.VerticalAlignment != null)
+                    {
+                        textMesh.verticalAlignment = replacementFont.VerticalAlignment.Value;
+                    }
+
+                    if (replacementFont.CharacterSpacing != null)
+                    {
+                        textMesh.characterSpacing = replacementFont.CharacterSpacing.Value;
+                    }
+
+                    if (replacementFont.WordSpacing != null)
+                    {
+                        textMesh.wordSpacing = replacementFont.WordSpacing.Value;
+                    }
+
+                    if (replacementFont.LineSpacing != null)
+                    {
+                        textMesh.lineSpacing = replacementFont.LineSpacing.Value;
+                    }
+
+                    if (replacementFont.ParagraphSpacing != null)
+                    {
+                        textMesh.paragraphSpacing = replacementFont.ParagraphSpacing.Value;
+                    }
+
                     textMesh.UpdateFontAsset();
 
                     if (replacementFont.Outline.Width != default)
@@ -187,16 +256,16 @@ namespace VagrusTranslationPatches
                     //textMesh.ForceMeshUpdate(true, true);
                     //textMesh.UpdateMeshPadding();
 
-                    TranslationPatchesPlugin.Log.LogMessage("Font replaced");
+                    TranslationPatchesPlugin.Log.LogMessage(" Font replaced");
                 }
             }
             else if (originalFont != null && originalFont != textMesh.font)
             {
                 textMesh.font = originalFont;
-                TranslationPatchesPlugin.Log.LogMessage("Font restored");
+                TranslationPatchesPlugin.Log.LogMessage(" Font restored");
             } else
             {
-                TranslationPatchesPlugin.Log.LogMessage("Font not found");
+                TranslationPatchesPlugin.Log.LogMessage(" Font not found");
             }
         }
 
