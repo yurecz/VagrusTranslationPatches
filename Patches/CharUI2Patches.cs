@@ -18,11 +18,35 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
         public static void ApplyCharacter_Postfix(
-        CharUI2 __instance,
-        Transform ___perkPrefab
+            CharUI2 __instance,
+            Transform ___perkPrefab
         )
-        {
-            ___perkPrefab.gameObject.UpdatePrefabFonts();   
+        { 
+
+            var proficiencyImage = __instance.gameObject.FindDeep("PerkUI/Image (1)").GetComponent<RectTransform>();
+            proficiencyImage.sizeDelta = new Vector2(400, proficiencyImage.sizeDelta.y);
+
+            var insightImage = __instance.gameObject.FindDeep("PerkUI/Image[6]").GetComponent<RectTransform>();
+            insightImage.sizeDelta = new Vector2(400, insightImage.sizeDelta.y);
+            insightImage.localPosition = new Vector2(-500, insightImage.localPosition.y);
+
+            var insightValue = __instance.gameObject.FindDeep("PerkUI/InsightValue").GetComponent<RectTransform>();
+            insightValue.localPosition = new Vector2(-350, insightValue.localPosition.y);
+            var insightValue2 = __instance.gameObject.FindDeep("PerkUI/InsightValue").GetComponent<TextMeshProUGUI>();
+            insightValue2.verticalAlignment = VerticalAlignmentOptions.Middle;
+
+            var insightTitle = __instance.gameObject.FindDeep("PerkUI/InsightTitle").GetComponent<RectTransform>();
+            insightTitle.sizeDelta = new Vector2(300, insightTitle.sizeDelta.y);
+            insightTitle.localPosition = new Vector2(-530, insightTitle.localPosition.y);
+
+            var insightTitle2 = __instance.gameObject.FindDeep("PerkUI/InsightTitle").GetComponent<TextMeshProUGUI>();
+            insightTitle2.verticalAlignment = VerticalAlignmentOptions.Middle;
+
+            var proficiencyTitle = __instance.gameObject.FindDeep("PerkUI/ProficiencyTitle").GetComponent<RectTransform>();
+            proficiencyTitle.sizeDelta = new Vector2(300, proficiencyImage.sizeDelta.y);
+
+            var proficiencyTitle2 = __instance.gameObject.FindDeep("PerkUI/ProficiencyTitle").GetComponent<TextMeshProUGUI>();
+            proficiencyTitle2.verticalAlignment = VerticalAlignmentOptions.Middle;
         }
 
         [HarmonyPatch("ApplyCharacter")]

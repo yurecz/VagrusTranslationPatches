@@ -51,6 +51,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime" />
+    <Reference Include="Unity.Addressables, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.Addressables.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\Unity.ResourceManager.dll</HintPath>
@@ -71,9 +75,22 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,6 +98,10 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestAudioModule">
       <HintPath>F:\SteamLibrary\steamapps\common\Vagrus - The Riven Realms\Vagrus_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
@@ -96,11 +117,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FontReplacer\ReplacementFontMapping.cs" />
-    <Compile Include="MonoBehaviours\PatchObject.cs" />
-    <Compile Include="MonoBehaviours\UIPrefabObjectTranslator.cs" />
-    <Compile Include="MonoBehaviours\UIPrefabFontUpdater.cs" />
-    <Compile Include="MonoBehaviours\UIObjectTranslator.cs" />
+    <Compile Include="FontUpdater\ReplacementFontMapping.cs" />
+    <Compile Include="FontUpdater\PatchObject.cs" />
+    <Compile Include="FontUpdater\UIPrefabFontUpdater.cs" />
     <Compile Include="MonoBehaviours\NarrationComponent.cs" />
     <Compile Include="Patches\BaseUIExPatches.cs" />
     <Compile Include="Patches\BookUIPatches.cs" />
@@ -116,6 +135,7 @@
     <Compile Include="Patches\FactionPatches.cs" />
     <Compile Include="Patches\GameCharacterPatches.cs" />
     <Compile Include="Patches\GameLogRowPatches.cs" />
+    <Compile Include="Patches\GameLogUIPatches.cs" />
     <Compile Include="Patches\GamePatches.cs" />
     <Compile Include="Patches\GearDraggablePatches.cs" />
     <Compile Include="Patches\GearPatches.cs" />
@@ -162,10 +182,10 @@
     <Compile Include="Patches\StoryUIPatches.cs" />
     <Compile Include="Patches\TaskInstancePatches.cs" />
     <Compile Include="Patches\TooltipPatches.cs" />
-    <Compile Include="Patches\Translators.cs" />
     <Compile Include="Patches\TutorialUIPatches.cs" />
     <Compile Include="Patches\TweakFunctionsPatches.cs" />
-    <Compile Include="PrefabUpdater\ResourcesPatches.cs" />
+    <Compile Include="FontUpdater\FontInfo.cs" />
+    <Compile Include="FontUpdater\MapPatches.cs" />
     <Compile Include="PriceHistory\ChartUIPatch.cs" />
     <Compile Include="PriceHistory\PriceHistoryBoxPatch.cs" />
     <Compile Include="PriceHistory\PriceHistoryColumnPatch.cs" />
@@ -178,7 +198,8 @@
     <Compile Include="StandaloneFileBrowser\StandaloneFileBrowserWindows.cs" />
     <Compile Include="TranslationPatchesPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FontReplacer\FontUtils.cs" />
+    <Compile Include="FontUpdater\FontUtils.cs" />
+    <Compile Include="Utils\TextMeshProUGUIUtils.cs" />
     <Compile Include="Utils\EventsJSON.cs" />
     <Compile Include="Utils\Nodes.cs" />
     <Compile Include="Utils\PriceHistoryRows.cs" />

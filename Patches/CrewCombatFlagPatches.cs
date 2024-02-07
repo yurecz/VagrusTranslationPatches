@@ -19,8 +19,8 @@ namespace VagrusTranslationPatches.Patches
 
             string baseDMGTooltip = Game.game.caravan.FindProperty(player ? Prop.PlayerBaseDMG : Prop.EnemyBaseDMG).GetTooltip(0, rightAlign: true);
             string generalTooltip = (side != CrewSide.Player)
-                ? FormatGeneralTooltip("Impervious Ward".FromDictionary(), Mathf.RoundToInt(crewCombat.GetWard(side)))
-                : FormatGeneralTooltip("Enchanted Damage".FromDictionary(), Mathf.RoundToInt(crewCombat.GetEnchantedDMG(side)));
+                ? FormatGeneralTooltip("Impervious Ward".FromDictionary(true), Mathf.RoundToInt(crewCombat.GetWard(side)))
+                : FormatGeneralTooltip("Enchanted Damage".FromDictionary(true), Mathf.RoundToInt(crewCombat.GetEnchantedDMG(side)));
 
             string baseWardTooltip = Game.game.caravan.FindProperty(player ? Prop.PlayerBaseWard : Prop.EnemyBaseWard).GetTooltip(0, rightAlign: true);
 

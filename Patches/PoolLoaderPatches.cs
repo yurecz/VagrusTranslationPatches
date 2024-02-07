@@ -33,10 +33,21 @@ namespace VagrusTranslationPatches.Patches
             var myEnumerator = new SimplePostfixEnumerator() { enumerator = __result, progressUpdater = progressUpdater };
             myEnumerator.actions.Add(() =>
             {
-                var dropDownButtonPrefab = Resources.Load<GameObject>("UI/Buttons/Prefab/DropDownButton");
-                var fieldInfo = typeof(DropDownEntry).GetField("buttonPrefab", BindingFlags.NonPublic | BindingFlags.Static);
-                fieldInfo.SetValue(null, dropDownButtonPrefab);
-                dropDownButtonPrefab.UpdatePrefabFonts();
+                if (Game.game!=null && Game.game.disclaimerInstance() != null)
+                {
+                    Game.game.disclaimerInstance().Translate();
+                }
+            });
+
+            myEnumerator.actions.Add(() =>
+            {
+                if (PatchObject.instance != null)
+                    PatchObject.instance.Translate("UI/Book/Prefab/ContractDetails");
+            });
+
+            myEnumerator.actions.Add(() =>
+            {
+                PatchObject.instance.UpdatePrefab("Assets/Addressables/Glossary/Prefab/GlossaryUI_prefab");
             });
 
             __result = myEnumerator.GetEnumerator();
@@ -89,7 +100,8 @@ namespace VagrusTranslationPatches.Patches
             {
                 i++;
                 progressUpdater(i / actions.Count());
-                yield return action;
+                action.Invoke();
+                yield return null;
             }
         }
     }

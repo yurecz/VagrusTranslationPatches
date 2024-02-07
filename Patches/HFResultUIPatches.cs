@@ -5,16 +5,16 @@ using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
 {
-    [HarmonyPatch(typeof(HFResultUI))]
-    internal class HFResultUIPatches
-    {
+    //[HarmonyPatch(typeof(HFResultUI))]
+    //internal class HFResultUIPatches
+    //{
 
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(HFResultUI __instance, GameObject ___prefab)
-        {
-            ___prefab.UpdatePrefabFonts();
-            HFResultUI.goodsPrefab.UpdatePrefabFonts();
-        }
-    }
+    //    [HarmonyPatch("Awake")]
+    //    [HarmonyPostfix]
+    //    public static void Awake_Postfix(HFResultUI __instance, GameObject ___prefab)
+    //    {
+    //        ___prefab.UpdatePrefabFonts();
+    //        HFResultUI.goodsPrefab.UpdatePrefabFonts();
+    //    }
+    //}
 }

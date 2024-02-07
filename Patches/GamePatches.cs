@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
@@ -13,15 +15,15 @@ using VagrusTranslationPatches.Utils;
 namespace VagrusTranslationPatches.Patches
 {
     [HarmonyPatch(typeof(Game))]
-    internal class GamePatches
+    public static class GamePatches
     {
 
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        public static void Awake_Postfix()
-        {
-           //TranslationPatchesPlugin.SetGameFixedValues();
-        }
+        //[HarmonyPatch("Awake")]
+        //[HarmonyPostfix]
+        //public static void Awake_Postfix()
+        //{
+        //   //TranslationPatchesPlugin.SetGameFixedValues();
+        //}
 
 
 
@@ -59,6 +61,14 @@ namespace VagrusTranslationPatches.Patches
         {
 
             __result = true;
+        }
+
+        public static GameObject disclaimerInstance(this Game obj)
+        {
+            Type type = obj.GetType();
+
+            FieldInfo privateFieldInfo = type.GetField("disclaimerInstance", BindingFlags.NonPublic | BindingFlags.Instance);
+            return (GameObject)privateFieldInfo.GetValue(obj);
         }
     }
 }

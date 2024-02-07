@@ -9,14 +9,13 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(Caravan))]
     internal class CaravanPatches
     {
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(Caravan __instance, GameObject ___ScoutUIPrefab)
-        {
-            ___ScoutUIPrefab.UpdatePrefabFonts();
-            ___ScoutUIPrefab.AddIfNotExistComponent<UIObjectTranslator>();
+        //[HarmonyPatch("Awake")]
+        //[HarmonyPostfix]
+        //public static void Awake_Postfix(Caravan __instance, GameObject ___ScoutUIPrefab)
+        //{
+        //    ___ScoutUIPrefab.UpdatePrefabFonts();
 
-        }
+        //}
 
         [HarmonyPatch("LiberateUpdateCall")]
         [HarmonyPostfix]

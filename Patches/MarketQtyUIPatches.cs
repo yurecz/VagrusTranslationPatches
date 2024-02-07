@@ -16,12 +16,12 @@ namespace VagrusTranslationPatches.Patches
 
     internal class MarketQtyUIPatches
     {
-        [HarmonyPatch("LoadResources")]
-        [HarmonyPostfix]
-        public static void LoadResources_Postfix(MarketQtyUI __instance, GameObject ___prefab)
-        {
-            ___prefab.AddOnceRecursiveComponent<UIFontUpdater>();
-        }
+        //[HarmonyPatch("LoadResources")]
+        //[HarmonyPostfix]
+        //public static void LoadResources_Postfix(MarketQtyUI __instance, GameObject ___prefab)
+        //{
+        //    ___prefab.AddOnceRecursiveComponent<UIFontUpdater>();
+        //}
 
         [HarmonyPatch("UpdateMarketValues")]
         [HarmonyPostfix]

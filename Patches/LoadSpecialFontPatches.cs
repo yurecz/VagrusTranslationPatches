@@ -17,13 +17,14 @@ namespace VagrusTranslationPatches.Patches
     internal class LoadSpecialFontPatches
     {
 
-        [HarmonyPatch(typeof(Game), "LoadSpecialFont", new Type[] { typeof(bool) })]
+        [HarmonyPatch(typeof(Game), "LoadSpecialFont", new Type[] { typeof(string) })]
         [HarmonyPostfix]
-        public static void LoadSpecialFont_Postfix(Game __instance, bool secondary = false)
+        public static void LoadSpecialFont_Postfix(Game __instance, ref IEnumerator __result, string languageCode)
         {
             var onLanguageChange = Traverse.Create(typeof(Game)).Field("onLanguageChange").GetValue() as UnityEvent;
-            if (Game.GetLanguageCode(secondary) == "ru")
+            if (languageCode == "ru")
             {
+                TranslationPatchesPlugin.Log.LogInfo("Start loading fonts");
                 FontUtils.ReplacementRecords.Clear();
 
                 Game.LoadedLanguagePacks.TryGetValue("ru", out var value);
@@ -31,9 +32,32 @@ namespace VagrusTranslationPatches.Patches
                     return;
 
                 FontUtils.LoadFonts();
-                
+
+                TranslationPatchesPlugin.Log.LogInfo("End loading fonts");
+
             }
         }
+
+        //[HarmonyPatch(typeof(Game), "LoadSpecialFont", new Type[] { typeof(bool) })]
+        //[HarmonyPostfix]
+        //public static void LoadSpecialFont_Postfix(Game __instance, bool secondary = false)
+        //{
+        //    var onLanguageChange = Traverse.Create(typeof(Game)).Field("onLanguageChange").GetValue() as UnityEvent;
+        //    if (Game.GetLanguageCode(secondary) == "ru")
+        //    {
+        //        TranslationPatchesPlugin.Log.LogInfo("Start loading fonts");
+        //        FontUtils.ReplacementRecords.Clear();
+
+        //        Game.LoadedLanguagePacks.TryGetValue("ru", out var value);
+        //        if (value == null)
+        //            return;
+
+        //        FontUtils.LoadFonts();
+
+        //        TranslationPatchesPlugin.Log.LogInfo("End loading fonts");
+
+        //    }
+        //}
 
         [HarmonyPatch(typeof(UIFontUpdater), "Awake")]
         [HarmonyPostfix]
@@ -128,7 +152,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPrefix]
         public static bool TranslateUIElements_Prefix(UITranslator __instance)
         {
-            var keyUIPairs = Traverse.Create(__instance).Field("keyUIPairs").GetValue() as KeyUIPair[];
+            var keyUIPairs = __instance.keyUIPairs;
             foreach (KeyUIPair keyUIPair in keyUIPairs)
             {
                 if (keyUIPair.textMesh == null)
@@ -136,32 +160,17 @@ namespace VagrusTranslationPatches.Patches
                     continue;
                 }
 
-                FontUtils.Update(keyUIPair.textMesh, keyUIPair.firstFont, "UITranslator");
+                //FontUtils.Update(keyUIPair.textMesh, keyUIPair.firstFont, "UITranslator");
 
                 if (keyUIPair.KeyText != "")
                 {
-                    if (Game.Dictionary.TryGetValue(keyUIPair.KeyText.ToLower().Trim('\n', ' '), out var value))
-                    {
-                        keyUIPair.textMesh.richText = true;
-                        //keyUIPair.textMesh.text = (keyUIPair.NoScaling ? value : Game.GetScaledLocalizedText(keyUIPair.textMesh, keyUIPair.KeyText, value));
-                        keyUIPair.textMesh.text = keyUIPair.textMesh.text.FromDictionary();
-                    }
-                    else
-                    {
-                        keyUIPair.textMesh.text = keyUIPair.KeyText;
-                    }
+                    keyUIPair.textMesh.richText = true;
+                    //keyUIPair.textMesh.text = (keyUIPair.NoScaling ? value : Game.GetScaledLocalizedText(keyUIPair.textMesh, keyUIPair.KeyText, value));
+                    keyUIPair.textMesh.text = keyUIPair.KeyText.FromDictionary(true);
                 }
 
             }
             return false;
-        }
-
-        [HarmonyPatch(typeof(UIElementTranslator), "Start")]
-        [HarmonyPrefix]
-        public static void Start_Prefix(UIElementTranslator __instance)
-        {
-            if (__instance.textMesh != null)
-                Translators.translators.Add(__instance.textMesh, __instance);
         }
 
         [HarmonyPatch(typeof(UIElementTranslator), "Start")]
@@ -181,33 +190,28 @@ namespace VagrusTranslationPatches.Patches
             var NoScaling = __instance.NoScaling;
             var IsTextTemplate = __instance.IsTextTemplate;
             string value;
-            FontUtils.Update(textMesh, firstFont, "UIElementTranslator");
+            //FontUtils.Update(textMesh, firstFont, "UIElementTranslator");
             if (IsTextTemplate)
             {
                 TextTemplate textTemplate = TextTemplate.FindByName(keyText);
                 if (textTemplate == null)
                 {
-                    Debug.LogError("No text template exists with the name: " + keyText);
+                    //Debug.LogError("No text template exists with the name: " + keyText);
+                    TranslationPatchesPlugin.Log.LogWarning("No text template exists with the name: " + keyText);
                 }
                 textMesh.richText = true;
                 //textMesh.text = (NoScaling ? textTemplate.GetText() : Game.GetScaledLocalizedText(textMesh, textTemplate.text, textTemplate.GetText()));
                 textMesh.text = textTemplate.GetText();
             }
-            else if (Game.Dictionary.TryGetValue(keyText.ToLower().Trim('\n', ' '), out value))
+            else
             {
+                value = keyText.Trim('\n');
                 textMesh.richText = true;
                 //textMesh.text = (NoScaling ? value : Game.GetScaledLocalizedText(textMesh, keyText, value));
-                textMesh.text = textMesh.text.FromDictionary();
+                textMesh.text = value.FromDictionary(true);
             }
             return false;
         }
 
-        [HarmonyPatch(typeof(UIElementTranslator), "OnDestroy")]
-        [HarmonyPrefix]
-        public static void OnDestroy_Prefix(UIElementTranslator __instance)
-        {
-            if (__instance.textMesh != null)
-                Translators.translators.Remove(__instance.textMesh);
-        }
     }
 }

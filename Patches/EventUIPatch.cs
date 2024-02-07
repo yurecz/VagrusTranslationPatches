@@ -18,15 +18,15 @@ namespace VagrusTranslationPatches.Patches
     internal class EventUIPatch
     {
 
-        [HarmonyTranspiler]
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        static void Awake_Postfix(EventUI __instance)
-        {
-            __instance.instance.AddOnceRecursiveComponent<UIFontUpdater>();
-            var eventChoice = Resources.Load<EventChoiceButton>("Event/Prefab/EventChoiceButton");
-            eventChoice.gameObject.AddOnceRecursiveComponent<UIFontUpdater>();
-        }
+        //[HarmonyTranspiler]
+        //[HarmonyPatch("Awake")]
+        //[HarmonyPostfix]
+        //static void Awake_Postfix(EventUI __instance)
+        //{
+        //    __instance.instance.AddOnceRecursiveComponent<UIFontUpdater>();
+        //    var eventChoice = Resources.Load<EventChoiceButton>("Event/Prefab/EventChoiceButton");
+        //    eventChoice.gameObject.AddOnceRecursiveComponent<UIFontUpdater>();
+        //}
 
         [HarmonyTranspiler]
         [HarmonyPatch("GetDependencyIcons")]

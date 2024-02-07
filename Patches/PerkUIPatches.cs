@@ -10,23 +10,23 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(PerkUI))]
     internal class PerkUIPatches
     {
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(PerkUI __instance)
-        {
-            var gameObject = __instance.gameObject;
-            if (gameObject != null && !gameObject.HasComponent<UIFontUpdater>())
-            {
-                gameObject.AddComponent<UIFontUpdater>();
-            }
+        //[HarmonyPatch("Awake")]
+        //[HarmonyPostfix]
+        //public static void Awake_Postfix(PerkUI __instance)
+        //{
+        //    var gameObject = __instance.gameObject;
+        //    if (gameObject != null && !gameObject.HasComponent<UIFontUpdater>())
+        //    {
+        //        gameObject.AddComponent<UIFontUpdater>();
+        //    }
             
-            var prefabPerkSingleRow = Resources.Load("UI/Prefab/PerkSingleRow") as GameObject;
+        //    var prefabPerkSingleRow = Resources.Load("UI/Prefab/PerkSingleRow") as GameObject;
 
-            if (prefabPerkSingleRow != null)
-            {
-                prefabPerkSingleRow.UpdatePrefabFonts();
-            }
-        }
+        //    if (prefabPerkSingleRow != null)
+        //    {
+        //        prefabPerkSingleRow.UpdatePrefabFonts();
+        //    }
+        //}
 
         [HarmonyPatch("UpdateCombatAbilitiesOld")]
         [HarmonyPostfix]

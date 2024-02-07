@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using VagrusTranslationPatches.Patches;
 using VagrusTranslationPatches.Utils;
 
@@ -16,7 +17,7 @@ namespace VagrusTranslationPatches
     {
         private const string MyGUID = "ru.Vagrus.TranslationPatches";
         private const string PluginName = "TranslationPatches";
-        private const string VersionString = "0.4.0";
+        private const string VersionString = "0.5.0";
 
         // Config entry key strings
         // These will appear in the config file created by BepInEx and can also be used
@@ -24,7 +25,7 @@ namespace VagrusTranslationPatches
         public static string FloatExampleKey = "Float Example Key";
         public static string IntExampleKey = "Int Example Key";
         public static string KeyboardShortcutRereadTranslationFilesKey = "Заново прочитать файлы перевода";
-
+        public static string KeyboardShortcutRereadFontsFilesKey = "Заново обновить шрифты";
         // Configuration entries. Static, so can be accessed directly elsewhere in code via
         // e.g.
         // float myFloat = VagrusTestModePlugin.FloatExample.Value;
@@ -32,6 +33,7 @@ namespace VagrusTranslationPatches
         public static ConfigEntry<float> FloatExample;
         public static ConfigEntry<int> IntExample;
         public static ConfigEntry<KeyboardShortcut> KeyboardShortcutRereadTranslationFiles;
+        public static ConfigEntry<KeyboardShortcut> KeyboardShortcutRereadFontsFiles;
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
         public static ManualLogSource Log = new ManualLogSource(PluginName);
@@ -60,10 +62,12 @@ namespace VagrusTranslationPatches
                 KeyboardShortcutRereadTranslationFilesKey,
                 new KeyboardShortcut(KeyCode.R, KeyCode.LeftControl));
 
-            // Add listeners methods to run if and when settings are changed by the player.
-            //FloatExample.SettingChanged += ConfigSettingChanged;
-            //IntExample.SettingChanged += ConfigSettingChanged;
+            KeyboardShortcutRereadFontsFiles = Config.Bind("Перевод",
+                KeyboardShortcutRereadFontsFilesKey,
+                new KeyboardShortcut(KeyCode.A, KeyCode.LeftControl));
+
             KeyboardShortcutRereadTranslationFiles.SettingChanged += ConfigSettingChanged;
+            KeyboardShortcutRereadFontsFiles.SettingChanged += ConfigSettingChanged;
 
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
             Harmony.PatchAll();
@@ -90,11 +94,11 @@ namespace VagrusTranslationPatches
                     if (Game.game.eventUIIsON)
                     {
                         var gameEvent = Game.GetActiveEvent();
-                        if (Game.GetActiveEvent() != null && gameEvent.curStep!=null)
+                        if (Game.GetActiveEvent() != null && gameEvent.curStep != null)
                         {
                             gameEvent.eventUI.RemoveUnusedChoicesFromLog(-1);
                             gameEvent.SelectStep(gameEvent.curStep);
-                            Logger.LogInfo("Событие "+ gameEvent.GetTitle()  + " обновлено.");
+                            Logger.LogInfo("Событие " + gameEvent.GetTitle() + " обновлено.");
                         }
                     }
                     TutorialUtils.UpdateTutorialText();
@@ -115,18 +119,23 @@ namespace VagrusTranslationPatches
                     Logger.LogInfo("Файлы перевода непрочитаны, так как перевод не включен в настройках игры.");
                 }
             }
+
+            if (TranslationPatchesPlugin.KeyboardShortcutRereadFontsFiles.Value.IsDown())
+            {
+                onFontsRefresh.Invoke();
+
+                Logger.LogInfo("Шрифты обновлены");
+
+            }
         }
 
-        /// <summary>
+        public static UnityEvent onFontsRefresh = new UnityEvent();
+
         /// Method to handle changes to configuration made by the player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ConfigSettingChanged(object sender, System.EventArgs e)
         {
             SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;
 
-            // Check if null and return
             if (settingChangedEventArgs == null)
             {
                 return;
@@ -146,14 +155,16 @@ namespace VagrusTranslationPatches
                 // Code here to do something with the new value
             }
 
-            // Example Keyboard Shortcut setting changed handler
             if (settingChangedEventArgs.ChangedSetting.Definition.Key == KeyboardShortcutRereadTranslationFilesKey)
             {
                 KeyboardShortcut newValue = (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
-
-                // TODO - Add your code here or remove this section if not required.
-                // Code here to do something with the new value
             }
+
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KeyboardShortcutRereadFontsFilesKey)
+            {
+                KeyboardShortcut newValue = (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
+            }
+
         }
 
         public void Dispose()
@@ -162,31 +173,33 @@ namespace VagrusTranslationPatches
         }
         public static void SetGameFixedValues()
         {
-            NewsTweak.Distance0Title = "Local".FromDictionary();
+            NewsTweak.Distance0Title = "Local".FromDictionary(true);
 
-            NewsTweak.Distance1Title = "Neighboring".FromDictionary();
+            NewsTweak.Distance1Title = "Neighboring".FromDictionary(true);
 
-            NewsTweak.Distance2Title = "Nearby".FromDictionary();
+            NewsTweak.Distance2Title = "Nearby".FromDictionary(true);
 
-            NewsTweak.Distance3Title = "Distant".FromDictionary();
+            NewsTweak.Distance3Title = "Distant".FromDictionary(true);
 
-            NewsTweak.Distance4Title = "Far away".FromDictionary();
+            NewsTweak.Distance4Title = "Far away".FromDictionary(true);
 
-            NewsTweak.Distance5Title = "Unbelievably far".FromDictionary();
+            NewsTweak.Distance5Title = "Unbelievably far".FromDictionary(true);
 
-            NewsTweak.Fresh0Title = "Fresh".FromDictionary();
+            NewsTweak.Fresh0Title = "Fresh".FromDictionary(true);
 
-            NewsTweak.Fresh1Title = "Recent".FromDictionary();
+            NewsTweak.Fresh1Title = "Recent".FromDictionary(true);
 
-            NewsTweak.Fresh2Title = "Stale".FromDictionary();
+            NewsTweak.Fresh2Title = "Stale".FromDictionary(true);
 
-            NewsTweak.Fresh3Title = "Outdated".FromDictionary();
+            NewsTweak.Fresh3Title = "Outdated".FromDictionary(true);
 
-            NewsTweak.Fresh4Title = "Very Old".FromDictionary();
+            NewsTweak.Fresh4Title = "Very Old".FromDictionary(true);
 
-            HuntingTweak.HuntingForagingTitle = "Acquire Supplies".FromDictionary();
+            HuntingTweak.HuntingForagingTitle = "Acquire Supplies".FromDictionary(true);
 
-            HuntingTweak.OddJobsTitle = "Odd Jobs".FromDictionary();
+            HuntingTweak.OddJobsTitle = "Odd Jobs".FromDictionary(true);
+
+            BookUI.notesCloseQuestion = "Any changes you have done will get lost.\n Are you sure?".FromDictionary(true);
     }
 
     }

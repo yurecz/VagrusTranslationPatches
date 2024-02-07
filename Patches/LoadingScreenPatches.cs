@@ -12,8 +12,9 @@ namespace VagrusTranslationPatches.Patches
     {
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
-        public static void Start_Postfix(LoadingScreen __instance)
+        public static void Start_Postfix(LoadingScreen __instance, float ___loadingTipDuration)
         {
+            ___loadingTipDuration = 10f;
             var loadingScreen = __instance.gameObject;
             if (loadingScreen != null && !loadingScreen.HasComponent<UIFontUpdater>())
             {

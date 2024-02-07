@@ -12,7 +12,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void LoadResources_Postfix(StoryUI __instance, GameObject ___storyElemPrefab)
         {
-            ___storyElemPrefab.UpdatePrefabFonts();
+            //___storyElemPrefab.UpdatePrefabFonts();
             __instance.SetUITitle("Stories".FromDictionary());
         }
     }

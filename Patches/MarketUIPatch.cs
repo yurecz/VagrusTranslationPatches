@@ -9,15 +9,15 @@ using VagrusTranslationPatches.Utils;
 namespace VagrusTranslationPatches.Patches
 {
     [HarmonyPatch(typeof(MarketUI))]
-    internal class CalenMarketUIPatch
+    internal class MarketUIPatch
     {
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
         public static void Start_Postfix(MarketUI __instance, GameObject ___noTradeOffers)
         {
             __instance.btnCargoText.text = "Goods";
+            ___noTradeOffers.AddComponent<UIElementTranslator>();
 
-            ___noTradeOffers.AddIfNotExistComponent<UIElementTranslator>();
         }
 
         //[HarmonyPatch("FindComponents")]

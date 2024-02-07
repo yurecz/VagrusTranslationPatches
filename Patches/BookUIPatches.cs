@@ -17,65 +17,65 @@ namespace VagrusTranslationPatches.Patches
     internal class BookUIPatches
     {
 
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(BookUI __instance, GameObject ___contractPrefab)
-        {
+        //[HarmonyPatch("Awake")]
+        //[HarmonyPostfix]
+        //public static void Awake_Postfix(BookUI __instance, GameObject ___contractPrefab)
+        //{
 
-            var contractPrefab = Resources.Load("UI/Book/Prefab/ContractDetails") as GameObject;
-            if (contractPrefab != null && !contractPrefab.HasComponent<UIObjectTranslator>())
-            {
-                contractPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var contractPrefab = Resources.Load("UI/Book/Prefab/ContractDetails") as GameObject;
+        //    if (contractPrefab != null && !contractPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        contractPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var cardPrefab = Resources.Load("UI/Book/Prefab/TaskCard") as GameObject;
-            if (cardPrefab != null && !cardPrefab.HasComponent<UIObjectTranslator>())
-            {
-                cardPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var cardPrefab = Resources.Load("UI/Book/Prefab/TaskCard") as GameObject;
+        //    if (cardPrefab != null && !cardPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        cardPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var deliverPrefab = Resources.Load("UI/Book/Prefab/DeliverRow") as GameObject;
-            if (deliverPrefab != null && !deliverPrefab.HasComponent<UIObjectTranslator>())
-            {
-                deliverPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var deliverPrefab = Resources.Load("UI/Book/Prefab/DeliverRow") as GameObject;
+        //    if (deliverPrefab != null && !deliverPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        deliverPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var flavorBlockPrefab = Resources.Load("UI/Book/Prefab/FlavorBlock") as GameObject;
-            if (flavorBlockPrefab != null && !flavorBlockPrefab.HasComponent<UIObjectTranslator>())
-            {
-                flavorBlockPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var flavorBlockPrefab = Resources.Load("UI/Book/Prefab/FlavorBlock") as GameObject;
+        //    if (flavorBlockPrefab != null && !flavorBlockPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        flavorBlockPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var rewardBlockPrefab = Resources.Load("UI/Book/Prefab/RewardBlock") as GameObject;
-            if (rewardBlockPrefab != null && !rewardBlockPrefab.HasComponent<UIObjectTranslator>())
-            {
-                rewardBlockPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var rewardBlockPrefab = Resources.Load("UI/Book/Prefab/RewardBlock") as GameObject;
+        //    if (rewardBlockPrefab != null && !rewardBlockPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        rewardBlockPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var rumorBottomPrefab = Resources.Load("UI/Book/Prefab/RumorBottomBlock") as GameObject;
-            if (rumorBottomPrefab != null && !rumorBottomPrefab.HasComponent<UIObjectTranslator>())
-            {
-                rumorBottomPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var rumorBottomPrefab = Resources.Load("UI/Book/Prefab/RumorBottomBlock") as GameObject;
+        //    if (rumorBottomPrefab != null && !rumorBottomPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        rumorBottomPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var entryPrefab = Resources.Load("UI/Book/Prefab/BookEntry") as GameObject;
-            if (entryPrefab != null && !entryPrefab.HasComponent<UIObjectTranslator>())
-            {
-                entryPrefab.AddComponent<UIObjectTranslator>();
-            }
+        //    var entryPrefab = Resources.Load("UI/Book/Prefab/BookEntry") as GameObject;
+        //    if (entryPrefab != null && !entryPrefab.HasComponent<UIObjectTranslator>())
+        //    {
+        //        entryPrefab.AddComponent<UIObjectTranslator>();
+        //    }
 
-            var chapterPrefab = Resources.Load("UI/Book/Prefab/BookChapterBlock") as GameObject;
-            if (chapterPrefab != null && !chapterPrefab.HasComponent<UIFontUpdater>())
-            {
-                chapterPrefab.AddComponent<UIFontUpdater>();
-            }
+        //    var chapterPrefab = Resources.Load("UI/Book/Prefab/BookChapterBlock") as GameObject;
+        //    if (chapterPrefab != null && !chapterPrefab.HasComponent<UIFontUpdater>())
+        //    {
+        //        chapterPrefab.AddComponent<UIFontUpdater>();
+        //    }
 
-            var noteEditorPrefab = Resources.Load("UI/Book/Prefab/JournalNoteEditor") as GameObject;
-            if (noteEditorPrefab != null && !noteEditorPrefab.HasComponent<UIFontUpdater>())
-            {
-                noteEditorPrefab.AddComponent<UIFontUpdater>();
-            }
-        }
+        //    var noteEditorPrefab = Resources.Load("UI/Book/Prefab/JournalNoteEditor") as GameObject;
+        //    if (noteEditorPrefab != null && !noteEditorPrefab.HasComponent<UIFontUpdater>())
+        //    {
+        //        noteEditorPrefab.AddComponent<UIFontUpdater>();
+        //    }
+        //}
 
         [HarmonyPatch("GetRewardTopText")]
         [HarmonyPostfix]
@@ -200,7 +200,7 @@ namespace VagrusTranslationPatches.Patches
                     }
                 case TaskCard.Time:
                     text = text + "<color=" + VisualTweak.Gold + ">" + "Time left".FromDictionary() + "</color>\n";
-                    text = text + "<b><color=" + color + ">" + leftDays + "</color>/" + initialExpireDays + " </b>" + "days".FromDictionary().ToLower() + "\n";
+                    text = text + "<b><color=" + color + ">" + leftDays + "</color>/" + initialExpireDays + " </b>" + "day5".FromDictionary().ToLower() + "\n";
                     break;
                 case TaskCard.Risk:
                     if (flag3)
@@ -216,7 +216,7 @@ namespace VagrusTranslationPatches.Patches
                     if (flag)
                     {
                         text = text + "<color=" + VisualTweak.Gold + ">" + "Late Delivery".FromDictionary() + "</color>\n";
-                        text = text + "<b><color=" + color + ">" + lateDeliveryRemainDays + "</color>/" + num3 + "</b> " + "days".FromDictionary().ToLower() + "\n";
+                        text = text + "<b><color=" + color + ">" + lateDeliveryRemainDays + "</color>/" + num3 + "</b> " + "day5".FromDictionary().ToLower() + "\n";
                     }
                     break;
             }
@@ -314,7 +314,7 @@ namespace VagrusTranslationPatches.Patches
                     lateDeliveryRemainDays.ToString(),
                     "</color>/",
                     num4.ToString(),
-                    "</b> "+"days".FromDictionary()+"\n"
+                    "</b> "+"day5".FromDictionary()+"\n"
                         });
                     }
                     break;
@@ -418,7 +418,7 @@ namespace VagrusTranslationPatches.Patches
                 num3.ToString(),
                 "</color>/",
                 initialExpireDays.ToString(),
-                "</b> "+"days".FromDictionary()+"\n"
+                "</b> "+"day5".FromDictionary()+"\n"
                     });
                     break;
             }
@@ -482,7 +482,7 @@ namespace VagrusTranslationPatches.Patches
                         int initialExpireDays = taskInstance.GetInitialExpireDays();
                         text = text + "<color=" + VisualTweak.Gold + ">"+"Time left".FromDictionary()+"</color>\n";
                         string text2 = (((float)expireDays / (float)initialExpireDays > 0.5f) ? VisualTweak.Green : (((float)expireDays / (float)initialExpireDays < 0.15f) ? VisualTweak.Red : VisualTweak.Orange));
-                        text = text + "<b><color=" + text2 + ">" + expireDays + "</color>/" + initialExpireDays + "</b> "+"days".FromDictionary()+"\n";
+                        text = text + "<b><color=" + text2 + ">" + expireDays + "</color>/" + initialExpireDays + "</b> "+"day5".FromDictionary()+"\n";
                     }
                     break;
             }
@@ -547,28 +547,28 @@ namespace VagrusTranslationPatches.Patches
             __result = Game.FromDictionary("Level") + " " + text + " " + ( taskInstance.GetTaskType().ToString() + " Task" ).FromDictionary() + text2;
         }
 
-        [HarmonyPatch("CreateRightTextBlock")]
-        [HarmonyPostfix]
-        public static void CreateRightTextBlock_PostFix(BookUI __instance, ref BookTextBlock __result)
-        {
-            FontUtils.Update(__result.tm,null, "BookUI=>CreateRightTextBlock");
-        }
+        //[HarmonyPatch("CreateRightTextBlock")]
+        //[HarmonyPostfix]
+        //public static void CreateRightTextBlock_PostFix(BookUI __instance, ref BookTextBlock __result)
+        //{
+        //    FontUtils.Update(__result.tm,null, "BookUI=>CreateRightTextBlock");
+        //}
 
-        [HarmonyPatch("AddEntry")]
-        [HarmonyPostfix]
-        public static void AddEntry_PostFix(BookUI __instance, BookEntry bookEntry)
-        {
-            FontUtils.Update(bookEntry.titleLeft, null, "BookUI=>AddEntry");
-            FontUtils.Update(bookEntry.titleRight, null, "BookUI=>AddEntry");
-        }
+        //[HarmonyPatch("AddEntry")]
+        //[HarmonyPostfix]
+        //public static void AddEntry_PostFix(BookUI __instance, BookEntry bookEntry)
+        //{
+        //    FontUtils.Update(bookEntry.titleLeft, null, "BookUI=>AddEntry");
+        //    FontUtils.Update(bookEntry.titleRight, null, "BookUI=>AddEntry");
+        //}
 
-        [HarmonyPatch("ClickEntry")]
-        [HarmonyPatch(new Type[] { typeof(BookEntry) })]
-        [HarmonyPostfix]
-        public static void ClickEntry_PostFix(BookUI __instance, TextMeshProUGUI ___rightText)
-        {
-            FontUtils.Update(___rightText, null, "BookUI=>ClickEntry");
-        }
+        //[HarmonyPatch("ClickEntry")]
+        //[HarmonyPatch(new Type[] { typeof(BookEntry) })]
+        //[HarmonyPostfix]
+        //public static void ClickEntry_PostFix(BookUI __instance, TextMeshProUGUI ___rightText)
+        //{
+        //    FontUtils.Update(___rightText, null, "BookUI=>ClickEntry");
+        //}
 
         [HarmonyPatch("GetContractTime")]
         [HarmonyPostfix]

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System;
 using VagrusTranslationPatches.Utils;
 using VagrusTranslationPatches;
+using Newtonsoft.Json;
+using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 namespace VagrusTranslationPatches
 {
@@ -44,6 +47,65 @@ namespace VagrusTranslationPatches
             {
                 Debug.LogError("PatchObject priceHistoryBoxInstance not found.");
             }
+        }
+
+        private static Dictionary<string,GameObject> prefabs = new Dictionary<string,GameObject>();
+
+        public GameObject UpdatePrefab(string path, string subObject = "")
+        {
+            if (!prefabs.TryGetValue(path, out var prefab))
+            {
+                if (path.Contains("Assets"))
+                {
+                    var obj = Addressables.LoadAssetAsync<GameObject>(path + ".prefab");
+                    prefab = obj.WaitForCompletion();
+                }
+                else
+                    prefab = Resources.Load(path) as GameObject;
+                if (prefab != null)
+                {
+                    if (subObject != "")
+                        prefab.FindDeep(subObject).UpdatePrefabFonts();
+                    else 
+                        prefab.UpdatePrefabFonts();
+
+                    prefabs[path] = prefab;
+                } else
+                {
+                    TranslationPatchesPlugin.Log.LogError("Prefab font update: " + path + " not found!");
+                }
+
+            }
+
+            return prefab;
+        }
+
+        public GameObject Translate(string path, string subObject = "")
+        {
+            TranslationPatchesPlugin.Log.LogMessage($"Translating object with path: {path}");
+
+            GameObject prefab;
+            if (path.Contains("Assets"))
+            {
+                var obj = Addressables.LoadAssetAsync<GameObject>(path + ".prefab");
+                prefab = obj.WaitForCompletion();
+            }
+            else
+                prefab = Resources.Load(path) as GameObject;
+            if (prefab != null)
+            {
+
+                prefab.Translate();
+
+                prefabs[path] = prefab;
+            }
+            else
+            {
+                TranslationPatchesPlugin.Log.LogError("Prefab translate: " + path + " not found!");
+            }
+
+
+            return prefab;
         }
 
         private static IEnumerator FindAllTextAndChangeFont(UIFontUpdater instance)

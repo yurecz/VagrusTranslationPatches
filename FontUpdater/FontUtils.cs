@@ -20,30 +20,11 @@ namespace VagrusTranslationPatches
 
         public static bool FindFont(string fontName, string target, out ReplacementFont replacementFont)
         {
-            var replacementRecordsCount = new Dictionary<ReplacementFontMapping, int>();
+            var replacementRecords = FindRelevantReplacementRecords(fontName, target);
 
-            //ProcessMatchingRecords(r => !string.IsNullOrEmpty(r.FontAssetName)
-            //         && r.FontAssetName == fontName                   
-            //         , replacementRecordsCount);
-
-            ProcessMatchingRecords( 
-                r => !string.IsNullOrEmpty(r.FontAssetName)
-                     && r.FontAssetName == fontName
-                     && string.IsNullOrEmpty(r.TargetRegEx)
-                     ,replacementRecordsCount
-                     ,1
-            );
-            ProcessMatchingRecords(
-                r => !string.IsNullOrEmpty(r.FontAssetName)
-                     && r.FontAssetName == fontName
-                     && !string.IsNullOrEmpty(r.TargetRegEx) && Regex.IsMatch(target, r.TargetRegEx)                      
-                     ,replacementRecordsCount
-                     ,2
-            );
-
-            if (replacementRecordsCount.Count > 0)
+            if (replacementRecords.Count() > 0)
             {
-                var record = replacementRecordsCount.OrderBy(kv => kv.Value).Last().Key;
+                var record = replacementRecords.Last().Key;
                 replacementFont = record.ReplacementFont;
                 return true;
             }
@@ -52,6 +33,26 @@ namespace VagrusTranslationPatches
                 replacementFont = default;
                 return false;
             }
+        }
+
+        public static IOrderedEnumerable<KeyValuePair<ReplacementFontMapping, int>> FindRelevantReplacementRecords(string fontName, string target)
+        {
+            var replacementRecords = new Dictionary<ReplacementFontMapping, int>();
+            ProcessMatchingRecords(
+                r => !string.IsNullOrEmpty(r.FontAssetName)
+                     && r.FontAssetName == fontName
+                     && string.IsNullOrEmpty(r.TargetRegEx)
+                     , replacementRecords
+                     , 1
+            );
+            ProcessMatchingRecords(
+                r => !string.IsNullOrEmpty(r.FontAssetName)
+                     && r.FontAssetName == fontName
+                     && !string.IsNullOrEmpty(r.TargetRegEx) && Regex.IsMatch(target, r.TargetRegEx)
+                     , replacementRecords
+                     , 2
+            );
+            return replacementRecords.OrderBy(kv => kv.Value);
         }
 
         private static void ProcessMatchingRecords( Func<ReplacementFontMapping, bool> predicate, Dictionary<ReplacementFontMapping, int> replacementRecordsCount, int score = 1)
@@ -164,12 +165,12 @@ namespace VagrusTranslationPatches
             var fullName = textMesh.gameObject.GetFullName();
             var name = callerName + "=>" + fullName;
 
-            TranslationPatchesPlugin.Log.LogMessage($" Full path: {name}");
+            TranslationPatchesPlugin.Log.LogMessage($" Full path: {callerName}");
             TranslationPatchesPlugin.Log.LogMessage($" Original font: {textMesh.font.name}");
             TranslationPatchesPlugin.Log.LogMessage(" " + textMesh.text);
 
             var fontName = textMesh.font.name;
-            if (FindFont(fontName, fullName, out var replacementFont))
+            if (FindFont(fontName, callerName, out var replacementFont))
             {
                 TranslationPatchesPlugin.Log.LogMessage($" Replacement font: {replacementFont.FontName }");
                 if (replacementFont.FontAsset != textMesh.font

@@ -10,23 +10,12 @@ namespace VagrusTranslationPatches.Patches
     [HarmonyPatch(typeof(ChartUI))]
     internal class ChartUIPatches
     {
-        [HarmonyPatch("Awake")]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(ChartUI __instance)
-        {
-            var prefab = Resources.Load<GameObject>("Chart/Prefab/ChartUI");
-            prefab.UpdatePrefabFonts();
+        //[HarmonyPatch("Awake")]
+        //[HarmonyPostfix]
+        //public static void Awake_Postfix(ChartUI __instance)
+        //{
 
-            var poiboxPrefab = Resources.Load<GameObject>("Chart/Prefab/POIBox");
-            poiboxPrefab.UpdatePrefabFonts();
-
-            var priceHistoryRowPrefab = Resources.Load<GameObject>("Chart/Prefab/PriceHistoryRow");
-            priceHistoryRowPrefab.UpdatePrefabFonts();
-
-            var priceHistoryBoxPrefab = Resources.Load<GameObject>("Chart/Prefab/PriceHistoryBox");
-            priceHistoryBoxPrefab.UpdatePrefabFonts();
-
-        }
+        //}
 
 
         [HarmonyPatch("GetNodeDistance")]
