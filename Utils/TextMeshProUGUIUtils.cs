@@ -12,7 +12,7 @@ namespace VagrusTranslationPatches.Utils
     {
         public static TextMeshProUGUI AddInfo(this TextMeshProUGUI component)
         {
-            var fontInfo = component.gameObject.AddComponent<FontInfo>();
+            var fontInfo = component.gameObject.AddComponent<GameTextInfo>();
             //fontInfo()
             return component;
         }

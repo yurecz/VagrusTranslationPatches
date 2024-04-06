@@ -76,5 +76,28 @@ namespace VagrusTranslationPatches.Patches
                 tooltip.UpdateLink("ButtonDefence" + i.ToString(), text);
             }
         }
+
+        [HarmonyPatch(typeof(CampUI), "UpdateDefenceButtons")]
+        [HarmonyPostfix]
+        public static void UpdateDefenceButtons(DefenceBox ___defenceBox, int ___defenceMode)
+        {
+            var defenceBox = ___defenceBox;
+            var defenceMode = ___defenceMode;
+
+            Impact impact = Impact.FindByName(Game.game.camp.campMode.ToString() + "Camp" + defenceMode);
+            if (impact == null)
+            {
+                return;
+            }
+
+            string text = Game.game.camp.GetDefenceDescription(impact.GetDescription(), defenceMode);
+            int defenceCost = Game.game.camp.GetDefenceCost(defenceMode);
+            if (defenceCost > 0)
+            {
+                text = text + "\n"+"Cost".FromDictionary() + ": " + Game.game.caravan.FormatMoney(defenceCost);
+            }
+
+            defenceBox.description.text = text;
+        }
     }
 }

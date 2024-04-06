@@ -5,6 +5,7 @@ using HarmonyLib;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using VagrusTranslationPatches.FontUpdater;
 using VagrusTranslationPatches.Patches;
 using VagrusTranslationPatches.Utils;
 
@@ -17,7 +18,7 @@ namespace VagrusTranslationPatches
     {
         private const string MyGUID = "ru.Vagrus.TranslationPatches";
         private const string PluginName = "TranslationPatches";
-        private const string VersionString = "0.5.0";
+        private const string VersionString = "0.7.0";
 
         // Config entry key strings
         // These will appear in the config file created by BepInEx and can also be used
@@ -26,6 +27,9 @@ namespace VagrusTranslationPatches
         public static string IntExampleKey = "Int Example Key";
         public static string KeyboardShortcutRereadTranslationFilesKey = "Заново прочитать файлы перевода";
         public static string KeyboardShortcutRereadFontsFilesKey = "Заново обновить шрифты";
+        public static string KeyboardShortcutEnableFontHelperKey = "Включить подсказку шрифта в игре";
+        public static string KeyboardShortcutEnableCopyTextToClipboardKey = "Скопировать текст";
+        public static string KeyboardShortcutEnableCopyPathToClipboardKey = "Скопировать путь";
         // Configuration entries. Static, so can be accessed directly elsewhere in code via
         // e.g.
         // float myFloat = VagrusTestModePlugin.FloatExample.Value;
@@ -34,6 +38,9 @@ namespace VagrusTranslationPatches
         public static ConfigEntry<int> IntExample;
         public static ConfigEntry<KeyboardShortcut> KeyboardShortcutRereadTranslationFiles;
         public static ConfigEntry<KeyboardShortcut> KeyboardShortcutRereadFontsFiles;
+        public static ConfigEntry<KeyboardShortcut> KeyboardShortcutEnableFontHelper;
+        public static ConfigEntry<KeyboardShortcut> KeyboardShortcutEnableCopyTextToClipboard;
+        public static ConfigEntry<KeyboardShortcut> KeyboardShortcutEnableCopyPathToClipboard;
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
         public static ManualLogSource Log = new ManualLogSource(PluginName);
@@ -62,18 +69,36 @@ namespace VagrusTranslationPatches
                 KeyboardShortcutRereadTranslationFilesKey,
                 new KeyboardShortcut(KeyCode.R, KeyCode.LeftControl));
 
-            KeyboardShortcutRereadFontsFiles = Config.Bind("Перевод",
+            KeyboardShortcutRereadFontsFiles = Config.Bind("Шрифты",
                 KeyboardShortcutRereadFontsFilesKey,
                 new KeyboardShortcut(KeyCode.A, KeyCode.LeftControl));
 
+            KeyboardShortcutEnableFontHelper = Config.Bind("Общие",
+                KeyboardShortcutEnableFontHelperKey,
+                new KeyboardShortcut(KeyCode.T, KeyCode.LeftControl));
+
+            KeyboardShortcutEnableCopyTextToClipboard = Config.Bind("Перевод",
+                KeyboardShortcutEnableCopyTextToClipboardKey,
+                new KeyboardShortcut(KeyCode.C, KeyCode.LeftControl));
+
+            KeyboardShortcutEnableCopyPathToClipboard = Config.Bind("Шрифты",
+                KeyboardShortcutEnableCopyPathToClipboardKey,
+                new KeyboardShortcut(KeyCode.P, KeyCode.LeftControl));
+
             KeyboardShortcutRereadTranslationFiles.SettingChanged += ConfigSettingChanged;
             KeyboardShortcutRereadFontsFiles.SettingChanged += ConfigSettingChanged;
+            KeyboardShortcutEnableFontHelper.SettingChanged += ConfigSettingChanged;
+            KeyboardShortcutEnableCopyTextToClipboard.SettingChanged += ConfigSettingChanged;
+            KeyboardShortcutEnableCopyPathToClipboard.SettingChanged += ConfigSettingChanged;
 
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
             Harmony.PatchAll();
 
             GameObject patchObjectGO = new GameObject("PatchObject");
             PatchObject patchObject = patchObjectGO.AddComponent<PatchObject>();
+
+            GameObject fontInspectorObject = new GameObject("FontInspector");
+            var fontInspector = fontInspectorObject.AddComponent<FontInspect>();
 
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
 
@@ -116,19 +141,48 @@ namespace VagrusTranslationPatches
                 }
                 else
                 {
-                    Logger.LogInfo("Файлы перевода непрочитаны, так как перевод не включен в настройках игры.");
+                    Logger.LogInfo("Файлы перевода непрочитаны, так как перевод не включён в настройках игры.");
                 }
             }
 
             if (TranslationPatchesPlugin.KeyboardShortcutRereadFontsFiles.Value.IsDown())
             {
+                FontUtils.ReplacementRecords.Clear();
+                FontUtils.LoadFonts();
+                PrefabsList.UpdatePrefabs();
+
+                PatchObject.instance.UpdatePrefab("Assets/Addressables/Glossary/Prefab/GlossaryUI_prefab");
+                PatchObject.instance.UpdatePrefab("Assets/Addressables/DLC-ICONS/DLC-ICON");
+
                 onFontsRefresh.Invoke();
 
                 Logger.LogInfo("Шрифты обновлены");
 
             }
+
+            if (TranslationPatchesPlugin.KeyboardShortcutEnableFontHelper.Value.IsDown())
+            {
+                isFontHelperEnabled = !isFontHelperEnabled;
+            }
+
+            if (TranslationPatchesPlugin.KeyboardShortcutEnableCopyTextToClipboard.Value.IsDown())
+            {
+               if (FontInspect.instance.FontInspectorCanvas.enabled) {
+                    GUIUtility.systemCopyBuffer = FontInspect.instance.SelectedText;
+                }
+            }
+
+            if (TranslationPatchesPlugin.KeyboardShortcutEnableCopyPathToClipboard.Value.IsDown())
+            {
+                if (FontInspect.instance.FontInspectorCanvas.enabled)
+                {
+                    GUIUtility.systemCopyBuffer = FontInspect.instance.PrefabName;
+                }
+            }
+
         }
 
+        public static bool isFontHelperEnabled = false;
         public static UnityEvent onFontsRefresh = new UnityEvent();
 
         /// Method to handle changes to configuration made by the player
@@ -161,6 +215,21 @@ namespace VagrusTranslationPatches
             }
 
             if (settingChangedEventArgs.ChangedSetting.Definition.Key == KeyboardShortcutRereadFontsFilesKey)
+            {
+                KeyboardShortcut newValue = (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
+            }
+
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KeyboardShortcutEnableFontHelperKey)
+            {
+                KeyboardShortcut newValue = (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
+            }
+
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KeyboardShortcutEnableCopyTextToClipboardKey)
+            {
+                KeyboardShortcut newValue = (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
+            }
+
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KeyboardShortcutEnableCopyPathToClipboardKey)
             {
                 KeyboardShortcut newValue = (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
             }

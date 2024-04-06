@@ -119,22 +119,22 @@ namespace VagrusTranslationPatches.Patches
 
                     case DeliverTime.Fast:
                         {
-                            text = $"{taskName} completed fast".FromDictionary() + " <b>" + daysPassed.ToDaysAgoText() + "</b>.";
+                            text = $"{taskName} completed fast".FromDictionary() + " " + daysPassed.ToDaysAgoText(true) + ".";
                             break;
                         }
                     case DeliverTime.Ontime:
                         {
-                            text = $"{taskName} completed on-time".FromDictionary() + " <b>" + daysPassed.ToDaysAgoText() + "</b>.";
+                            text = $"{taskName} completed on-time".FromDictionary() + " " + daysPassed.ToDaysAgoText(true) + ".";
                             break;
                         }
                     case DeliverTime.Late:
                         {
-                            text = $"{taskName} completed late".FromDictionary() + " <b>" + daysPassed.ToDaysAgoText() + "</b>.";
+                            text = $"{taskName} completed late".FromDictionary() + " " + daysPassed.ToDaysAgoText(true) + ".";
                             break;
                         }
                     case DeliverTime.Failed:
                         {
-                            text = $"{taskName} failed".FromDictionary() + " <b>" + daysPassed.ToDaysAgoText() + "</b>.";
+                            text = $"{taskName} failed".FromDictionary() + " " + daysPassed.ToDaysAgoText(true) + ".";
                             break;
                         }
                 }
@@ -368,7 +368,7 @@ namespace VagrusTranslationPatches.Patches
                         if (taskInstance.GetOpposingFaction() != null && taskInstance.GetOpposingFaction().IsImpervious())
                         {
                             text = text + "<color=" + VisualTweak.Gold + ">" + "Risk".FromDictionary() + "</color>\n";
-                            text += "Impervious Enemy".FromDictionary()+"\n";
+                            text += "Impervious Enemy".FromDictionary() + "\n";
                         }
                         else if (flag3)
                         {
@@ -425,7 +425,7 @@ namespace VagrusTranslationPatches.Patches
             if (text.Length == 0 && taskInstance.passenger != null && taskInstance.passenger.GetPassengers() > 0)
             {
                 MethodInfo methodInfo = typeof(BookUI).GetMethod("GetPassengerCardDescription", BindingFlags.NonPublic | BindingFlags.Instance);
-                var parameters = new object[] { taskInstance,card };
+                var parameters = new object[] { taskInstance, card };
                 text = (string)methodInfo.Invoke(__instance, parameters);
             }
             __result = text;
@@ -443,35 +443,35 @@ namespace VagrusTranslationPatches.Patches
                 case TaskCard.Passengers:
                     {
                         int passengers = taskInstance.passenger.GetPassengers();
-                        text = text + "<color=" + VisualTweak.Gold + ">"+"Passengers".FromDictionary()+"</color>\n";
+                        text = text + "<color=" + VisualTweak.Gold + ">" + "Passengers".FromDictionary() + "</color>\n";
                         text += passengers;
                         break;
                     }
                 case TaskCard.Fighters:
                     {
                         int fighters = taskInstance.passenger.GetFighters();
-                        text = text + "<color=" + VisualTweak.Gold + ">"+"Fighters".FromDictionary()+"</color>\n";
+                        text = text + "<color=" + VisualTweak.Gold + ">" + "Fighters".FromDictionary() + "</color>\n";
                         text += fighters;
                         break;
                     }
                 case TaskCard.Consumption:
                     {
                         int consumption = taskInstance.passenger.GetConsumption();
-                        text = text + "<color=" + VisualTweak.Gold + ">"+"Consumption".FromDictionary()+"</color>\n";
+                        text = text + "<color=" + VisualTweak.Gold + ">" + "Consumption".FromDictionary() + "</color>\n";
                         text += consumption;
                         break;
                     }
                 case TaskCard.Workforce:
                     if (workforceFloat > 0f || workforceFloat == workforceNeedFloat)
                     {
-                        text = text + "<color=" + VisualTweak.Gold + ">"+"Workforce".FromDictionary()+"</color>\n";
+                        text = text + "<color=" + VisualTweak.Gold + ">" + "Workforce".FromDictionary() + "</color>\n";
                         text += workforceFloat;
                     }
                     break;
                 case TaskCard.WorkforceNeed:
                     if (workforceNeedFloat > 0f)
                     {
-                        text = text + "<color=" + VisualTweak.Gold + ">"+"Workforce need".FromDictionary()+"</color>\n";
+                        text = text + "<color=" + VisualTweak.Gold + ">" + "Workforce need".FromDictionary() + "</color>\n";
                         text += workforceNeedFloat;
                     }
                     break;
@@ -480,9 +480,9 @@ namespace VagrusTranslationPatches.Patches
                     {
                         int expireDays = taskInstance.GetExpireDays();
                         int initialExpireDays = taskInstance.GetInitialExpireDays();
-                        text = text + "<color=" + VisualTweak.Gold + ">"+"Time left".FromDictionary()+"</color>\n";
+                        text = text + "<color=" + VisualTweak.Gold + ">" + "Time left".FromDictionary() + "</color>\n";
                         string text2 = (((float)expireDays / (float)initialExpireDays > 0.5f) ? VisualTweak.Green : (((float)expireDays / (float)initialExpireDays < 0.15f) ? VisualTweak.Red : VisualTweak.Orange));
-                        text = text + "<b><color=" + text2 + ">" + expireDays + "</color>/" + initialExpireDays + "</b> "+"day5".FromDictionary()+"\n";
+                        text = text + "<b><color=" + text2 + ">" + expireDays + "</color>/" + initialExpireDays + "</b> " + "day5".FromDictionary() + "\n";
                     }
                     break;
             }
@@ -544,7 +544,7 @@ namespace VagrusTranslationPatches.Patches
             {
                 text2 = " <color=" + VisualTweak.Red + ">(" + taskInstance.GetStatus().ToString() + ")</color>";
             }
-            __result = Game.FromDictionary("Level") + " " + text + " " + ( taskInstance.GetTaskType().ToString() + " Task" ).FromDictionary() + text2;
+            __result = Game.FromDictionary("Level") + " " + text + " " + (taskInstance.GetTaskType().ToString() + " Task").FromDictionary() + text2;
         }
 
         //[HarmonyPatch("CreateRightTextBlock")]
@@ -581,20 +581,38 @@ namespace VagrusTranslationPatches.Patches
 
         [HarmonyPatch("GetContractMissingCargo")]
         [HarmonyPostfix]
-        public static void GetContractMissingCargo_PostFix(TaskInstance taskInstance, DeliverTime deliverTime,ref string __result)
+        public static void GetContractMissingCargo_PostFix(TaskInstance taskInstance, DeliverTime deliverTime, ref string __result)
         {
             string text = "";
             int totalPenalty = taskInstance.GetTotalPenalty();
-            if (deliverTime - DeliverTime.Fast > 2)
+
+            switch (deliverTime)
             {
-                if (deliverTime == DeliverTime.Failed)
-                {
-                    text += BookUI.game.caravan.FormatMoneyLyrgBross(totalPenalty, false, false, 2);
-                }
+                case DeliverTime.Fast:
+                case DeliverTime.Ontime:
+                case DeliverTime.Late:
+                    text = text + taskInstance.GetPenalties() + "/missing unit".FromDictionary();
+                    break;
+                case DeliverTime.Failed:
+                    text += Game.game.caravan.FormatMoneyLyrgBross(totalPenalty, showZero: false, showLeadZero: false);
+                    break;
             }
-            else
+            __result = text;
+        }
+
+        [HarmonyPatch("GetRewardMoneyText")]
+        [HarmonyPostfix]
+        public static void GetRewardMoneyText_PostFix(TaskInstance taskInstance, ref string __result)
+        {
+            string text = "";
+            int actualPayment = taskInstance.GetActualPayment(simulateSuccess: true);
+            if (actualPayment > 0)
             {
-                text = text + taskInstance.GetPenalties() + "/missing unit".FromDictionary();
+                text = text + "<b>" + Game.FromDictionary("Coins") + "</b>      " + Game.game.caravan.FormatMoneyLyrgBross(actualPayment, showZero: false, showLeadZero: false);
+                if (taskInstance.IsPassengerTask() && taskInstance.passenger.GetTip() > 0)
+                {
+                    text = text + "\n<b>" + Game.FromDictionary("Tip") + "</b>          " + taskInstance.passenger.GetTipMinRate() + "-" + taskInstance.passenger.GetTipMaxRate() + "%";
+                }
             }
             __result = text;
         }
@@ -634,13 +652,36 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPrefix]
         public static bool UpdateCardOffset(TaskCard card, ref float ___rightVOffset, ref float ___rightHOffset)
         {
-            ___rightHOffset += 500f;
-            if (___rightHOffset > 500f)
+            ___rightHOffset += 450f;
+            if (___rightHOffset > 450f)
             {
                 ___rightHOffset = 0f;
                 ___rightVOffset += 130f;
             }
             return false;
         }
+
+        [HarmonyPatch("UpdateCodexTags")]
+        [HarmonyPostfix]
+        public static void UpdateCodexTags_Postfix(BookUI __instance, CodexEntry codex, TextMeshProUGUI ___tagsRow)
+        {
+            var tagsRow = ___tagsRow;
+            if (codex.tags.Count == 0)
+            {
+                tagsRow.text = "";
+                return;
+            }
+            string text = "";
+            foreach (CodexTag tag in codex.tags)
+            {
+                if (text.Length > 0)
+                {
+                    text += ", ";
+                }
+                text = text + "<link=\"" + tag.GetName() + "\"><u>" + tag.GetName() + "</u></link>";
+            }
+            tagsRow.text = "Tags".FromDictionary() + ": " + text;
+        }
+
     }
 }

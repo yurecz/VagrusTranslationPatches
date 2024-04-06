@@ -5,6 +5,7 @@ using HarmonyLib;
 using System.Security.Cryptography;
 using UnityEngine;
 using VagrusTranslationPatches.Utils;
+using static UnityEngine.GraphicsBuffer;
 
 namespace VagrusTranslationPatches.Patches
 {
@@ -44,11 +45,20 @@ namespace VagrusTranslationPatches.Patches
                 case Prop.Money:
                     {
                         caravan.MoneyToCurrency(out var changer, out var lyrg, out var bross);
-                        __result = bross.FormatNumberByNomen("bross") + " "+lyrg.FormatNumberByNomen("lyrg") + " " + changer.FormatNumberByNomen("changer");
+                        __result = bross.FormatNumberByNomen("bross") + " " + lyrg.FormatNumberByNomen("lyrg") + " " + changer.FormatNumberByNomen("changer");
                         break;
                     }
 
             }
+        }
+
+        [HarmonyPatch("GetStatusTooltip")]
+        [HarmonyPostfix]
+        public static void  GetStatusTooltip_postfix(Property __instance, ref string __result)
+        {
+            string text = "<b><size=" + VisualTweak.TooltipHeaderSize + "%>" + __instance.GetTitle() + "</size></b> (" + __instance.target.ToString().FromDictionary() + ")";
+
+            __result = text + "\n" + __result.RemoveFirstLineFromString();
         }
     }
 }

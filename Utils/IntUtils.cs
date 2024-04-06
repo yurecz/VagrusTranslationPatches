@@ -46,16 +46,64 @@ namespace VagrusTranslationPatches.Utils
             return formattedText.ToLower();
         }
 
-        public static string ToDaysAgoText(this int number)
+        public static string ToDaysLeftText(this int number)
         {
             string formattedText = "";
             if (number == 0)
             {
-                formattedText = "today".FromDictionary();
+                formattedText = "is today".FromDictionary();
             }
             else
             {
-                formattedText = number.FormatNumberByNomen("day") + " " + "ago".FromDictionary();
+                formattedText = string.Format("{0} left".FromDictionary(),number.FormatNumberByNomen("day"));
+            }
+
+            return formattedText.ToLower();
+        }
+
+        public static string ToInDaysText(this int number)
+        {
+            string formattedText = "";
+            if (number == 0)
+            {
+                formattedText = "is today".FromDictionary();
+            }
+            else
+            {
+                formattedText = string.Format("in {0}".FromDictionary(), number.FormatNumberByNomen("day"));
+            }
+
+            return formattedText.ToLower();
+        }
+
+        public static string ToDaysAgoText(this int number,bool roughly = false)
+        {
+            string formattedText = "";
+            if (number == 0)
+            {
+                formattedText = $"<b>{"today".FromDictionary()}</b>";
+            }
+            else
+            {
+                var value = number;
+                formattedText = $"<b>{value.FormatNumberByNomen("day")}</b> {"ago".FromDictionary()}";
+                if (roughly)
+                {
+                    value = number / 360;
+                    if (value >= 1)
+                    {
+                        formattedText = $"<b>{value.FormatNumberByNomen("year")}</b> {"ago".FromDictionary()}";
+                    }
+                    else
+                    {
+                        value = number / 30;
+                        if (value >= 3)
+                        {
+                            formattedText = $"<b>{value.FormatNumberByNomen("month")}</b> {"ago".FromDictionary()}";
+                        }
+                    }
+
+                }
             }
 
             return formattedText.ToLower();

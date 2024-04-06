@@ -62,19 +62,19 @@ namespace VagrusTranslationPatches
                 }
                 else
                     prefab = Resources.Load(path) as GameObject;
-                if (prefab != null)
-                {
-                    if (subObject != "")
-                        prefab.FindDeep(subObject).UpdatePrefabFonts();
-                    else 
-                        prefab.UpdatePrefabFonts();
+            }
+            if (prefab != null)
+            {
+                if (subObject != "")
+                    prefab.FindDeep(subObject).UpdatePrefabFonts();
+                else
+                    prefab.UpdatePrefabFonts();
 
-                    prefabs[path] = prefab;
-                } else
-                {
-                    TranslationPatchesPlugin.Log.LogError("Prefab font update: " + path + " not found!");
-                }
-
+                prefabs[path] = prefab;
+            }
+            else
+            {
+                TranslationPatchesPlugin.Log.LogError("Prefab font update: " + path + " not found!");
             }
 
             return prefab;

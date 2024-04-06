@@ -201,15 +201,15 @@ namespace VagrusTranslationPatches.Utils
             var textMeshes = prefab.transform.GetComponentsInChildren<TextMeshProUGUI>(true);
             foreach (var textMesh in textMeshes)
             {
-                    if (!textMesh.gameObject.HasComponent<FontInfo>())
-                    {
-                        var prefabName = textMesh.gameObject.GetFullName();
-                        var fontInfo = textMesh.gameObject.AddComponent<FontInfo>();
-                        fontInfo.prefabName = prefabName;
-                        FontUtils.Update(textMesh, null, prefabName);
+                var prefabName = textMesh.gameObject.GetFullName();
+                var gameTextInfo = textMesh.gameObject.GetComponent<GameTextInfo>();
+                if (gameTextInfo==null)
+                {
+                    gameTextInfo = textMesh.gameObject.AddComponent<GameTextInfo>();
+                    gameTextInfo.prefabName = prefabName;
                 }
-           }
-
+                FontUtils.Update(textMesh, null, prefabName);
+            }
             TranslationPatchesPlugin.Log.LogMessage($" Updated prefab: {prefab.GetFullName()} found {textMeshes.Count()} components");
         }
 
@@ -229,6 +229,27 @@ namespace VagrusTranslationPatches.Utils
 
             TranslationPatchesPlugin.Log.LogMessage($" Translated prefab: {prefab.GetFullName()} found {textMeshes.Count()} components");
             return prefab;
+        }
+
+        public static GameObject CloneButton(this GameObject headerDisplayPrice, string originalButtonName, string newButtonName, string newButtonText, float shiftX, float shiftY, float deltaX)
+        {
+            var buttonFull = headerDisplayPrice.FindDeepChild(originalButtonName);
+            if (buttonFull != null)
+            {
+                var clonedButton = GameObject.Instantiate(buttonFull);
+                clonedButton.name = newButtonName;
+                clonedButton.transform.SetParent(buttonFull.transform.parent, false);
+                clonedButton.transform.localPosition = buttonFull.transform.localPosition + new Vector3(shiftX + deltaX / 2, shiftY, 0);
+                clonedButton.FindDeep("Inactive").GetComponent<RectTransform>().sizeDelta += new Vector2(deltaX, 0);
+                clonedButton.FindDeep("Selected").GetComponent<RectTransform>().sizeDelta += new Vector2(deltaX, 0);
+                clonedButton.FindDeep("Hover").GetComponent<RectTransform>().sizeDelta += new Vector2(deltaX, 0);
+                clonedButton.FindDeep("Normal").GetComponent<RectTransform>().sizeDelta += new Vector2(deltaX, 0);
+                clonedButton.transform.Find("Holder/Title").GetComponent<TextMeshProUGUI>().text = newButtonText;
+                clonedButton.GetComponent<ButtonUI>().SetHoverEnabled(true);
+                return clonedButton;
+            }
+
+            return null;
         }
 
     }

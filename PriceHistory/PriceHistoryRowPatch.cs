@@ -10,7 +10,7 @@ namespace VagrusTranslationPatches.PriceHistory
     {
         [HarmonyPatch("Update")]
         [HarmonyPostfix]
-        public static void Update_Postfix(PriceHistoryRow __instance, TextMeshProUGUI ___name, PriceHistoryBox ___priceHistoryBox, Goods ___goods)
+        public static void Update_Postfix(PriceHistoryRow __instance, TextMeshProUGUI ___name, PriceHistoryBox ___priceHistoryBox, Goods ___goods, GoodsBox ___goodsBox)
         {
             var priceHistoryBox = ___priceHistoryBox;
             var name = ___name;
@@ -84,7 +84,9 @@ namespace VagrusTranslationPatches.PriceHistory
                 }
                 num++;
             }
-            UpdateGoodsBox(__instance);
+            //UpdateGoodsBox(__instance);
+            ___goodsBox.qty.SetActive(true);
+            ___goodsBox.text.text = Game.game.caravan.cargo.CountGoodsQty(goods).ToString();
         }
 
         private static bool GetContraband(Goods goods, Node source, Node dest)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
@@ -13,7 +14,7 @@ using VagrusTranslationPatches.Utils;
 namespace VagrusTranslationPatches.Patches
 {
     [HarmonyPatch(typeof(CharUI2))]
-    internal class CharUI2Patches
+    public static class CharUI2Patches
     {
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
@@ -71,6 +72,14 @@ namespace VagrusTranslationPatches.Patches
                 ___labelName.text = Game.FromDictionary("No Companions");
                 ___labelLoyalty.text = "";
             }
+        }
+
+        public static Transform perkPrefab(this CharUI2 instance)
+        {
+            Type myType = typeof(CharUI2);
+            FieldInfo privateFieldInfo = myType.GetField("perkPrefab", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return (Transform)privateFieldInfo.GetValue(instance);
         }
 
     }

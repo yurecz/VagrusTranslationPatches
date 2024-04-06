@@ -41,13 +41,18 @@ namespace VagrusTranslationPatches.Patches
 
             myEnumerator.actions.Add(() =>
             {
-                if (PatchObject.instance != null)
+                //if (PatchObject.instance != null)
                     PatchObject.instance.Translate("UI/Book/Prefab/ContractDetails");
             });
 
             myEnumerator.actions.Add(() =>
             {
                 PatchObject.instance.UpdatePrefab("Assets/Addressables/Glossary/Prefab/GlossaryUI_prefab");
+            });
+
+            myEnumerator.actions.Add(() =>
+            {
+                PatchObject.instance.UpdatePrefab("Assets/Addressables/DLC-ICONS/DLC-ICON");
             });
 
             __result = myEnumerator.GetEnumerator();

@@ -42,7 +42,7 @@ namespace VagrusTranslationPatches.MonoBehaviours
             TextMeshProUGUI[] componentsInChildren = base.transform.GetComponentsInChildren<TextMeshProUGUI>(includeInactive: true);
             foreach (TextMeshProUGUI textMeshProUGUI in componentsInChildren)
             {
-                if (!textMeshProUGUI.gameObject.HasComponent<FontInfo>())
+                if (!textMeshProUGUI.gameObject.HasComponent<GameTextInfo>())
                 {
                     var prefabName = textMeshProUGUI.gameObject.GetFullName();
                     textComponents.Add(new TextComponent
@@ -50,7 +50,7 @@ namespace VagrusTranslationPatches.MonoBehaviours
                         textMesh = textMeshProUGUI,
                         prefabName = prefabName
                     });
-                    var fontInfo = textMeshProUGUI.gameObject.AddComponent<FontInfo>();
+                    var fontInfo = textMeshProUGUI.gameObject.AddComponent<GameTextInfo>();
                     fontInfo.prefabName = prefabName;
                 }
 

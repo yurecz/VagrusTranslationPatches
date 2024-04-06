@@ -17,68 +17,55 @@ namespace VagrusTranslationPatches.PriceHistory
         public static void LoadResources_Postfix(ChartUI __instance, GameObject ___priceHistoryBoxPrefab)
         {
             var shiftY = 64f;
+            var shiftX = 190.5f;
+            var deltaX = 70f;
 
-            if (sellProfitButton != null) { return; }
+            if (___priceHistoryBoxPrefab.FindDeepChild("SellProfit") != null) return;
 
             var headerDisplayPrice = ___priceHistoryBoxPrefab.FindDeepChild("HeaderDisplayPrice");
 
-            var templateButton = headerDisplayPrice.FindDeepChild("ButtonFull");
-            if (templateButton != null)
-            {
-                sellProfitButton = GameObject.Instantiate(templateButton);
-                sellProfitButton.name = "SellProfit";
-                sellProfitButton.transform.SetParent(templateButton.transform.parent, false);
-                sellProfitButton.transform.localPosition = templateButton.transform.localPosition - new Vector3(0, shiftY, 0);
-                sellProfitButton.transform.Find("Holder/Title").GetComponent<TextMeshProUGUI>().text = "Sell Profit";
-            }
+            var headerDisplayPriceTitle = headerDisplayPrice.FindDeepChild("Title");
+            headerDisplayPriceTitle.transform.localPosition += new Vector3(350f, 60f, 0);
 
-            templateButton = headerDisplayPrice.FindDeepChild("ButtonDifference");
-            if (templateButton != null)
-            {
-                buyProfitButton = GameObject.Instantiate(templateButton);
-                buyProfitButton.name = "BuyProfit";
-                buyProfitButton.transform.SetParent(templateButton.transform.parent, false);
-                buyProfitButton.transform.localPosition = templateButton.transform.localPosition - new Vector3(0, shiftY, 0);
-                buyProfitButton.transform.Find("Holder/Title").GetComponent<TextMeshProUGUI>().text = "Buy Profit";
-            }
+            var sellProfitButton = headerDisplayPrice.CloneButton("ButtonFull","SellProfit", "Sell Profit", shiftX, 0, deltaX);
+
+            var buyProfitButton = headerDisplayPrice.CloneButton("ButtonFull", "BuyProfit", "Buy Profit", shiftX, -shiftY, deltaX);
+
+            var buttonDifference = headerDisplayPrice.FindDeepChild("ButtonDifference");
+            buttonDifference.transform.localPosition += new Vector3(-shiftX, -shiftY, 0);
+
+            var buttonStack = headerDisplayPrice.FindDeepChild("ButtonStack");
+            buttonStack.transform.localPosition += new Vector3(deltaX, 0, 0);
 
             var group = headerDisplayPrice.FindDeepChild("Group");
             if (group != null)
             {
                 var groupRect = group.GetComponent<RectTransform>();
-                groupRect.sizeDelta += new Vector2(0, shiftY);
-                group.transform.localPosition -= new Vector3(0, shiftY / 2f, 0);
+                groupRect.sizeDelta += new Vector2(deltaX, shiftY);
+                group.transform.localPosition += new Vector3(deltaX / 2, -shiftY / 2f, 0);
             }
 
             var headerSortBy = ___priceHistoryBoxPrefab.FindDeepChild("HeaderSortBy");
-            var buttonDistance = headerSortBy.FindDeepChild("ButtonDistance");
 
-            if (buttonDistance != null)
-            {
-                GameObject sortBySellProfitButton = GameObject.Instantiate(buttonDistance);
-                sortBySellProfitButton.name = "SortBySellProfit";
-                sortBySellProfitButton.transform.SetParent(buttonDistance.transform.parent, false);
-                sortBySellProfitButton.transform.localPosition = buttonDistance.transform.localPosition - new Vector3(0, shiftY, 0);
-                sortBySellProfitButton.transform.Find("Holder/Title").GetComponent<TextMeshProUGUI>().text = "Sell Profit";
-            }
+            var headerSortByTitle = headerSortBy.FindDeepChild("Title");
+            headerSortByTitle.transform.localPosition += new Vector3(400f, 60f, 0);
 
-            var buttonName = headerSortBy.FindDeepChild("ButtonName");
+            var sortBySellProfit = headerSortBy.CloneButton("ButtonDistance", "SortBySellProfit", "Sell Profit", 2*shiftX, 0, deltaX);
 
-            if (buttonName != null)
-            {
-                GameObject sortByBuyProfitButton = GameObject.Instantiate(buttonName);
-                sortByBuyProfitButton.name = "SortByBuyProfit";
-                sortByBuyProfitButton.transform.SetParent(buttonName.transform.parent, false);
-                sortByBuyProfitButton.transform.localPosition = buttonName.transform.localPosition - new Vector3(0, shiftY, 0);
-                sortByBuyProfitButton.transform.Find("Holder/Title").GetComponent<TextMeshProUGUI>().text = "Buy Profit";
-            }
+            var sortByBuyProfit = headerSortBy.CloneButton("ButtonDistance", "SortByBuyProfit", "Buy Profit", 2*shiftX, -shiftY, deltaX);
+
+            var realmGateButton = headerSortBy.FindDeepChild("RealmGateButton");
+            realmGateButton.transform.localPosition += new Vector3(-60f, shiftY, 0);
+
+            var buttonDistance = headerSortBy.FindDeepChild("ButtonName");
+            buttonDistance.transform.localPosition += new Vector3(-2*shiftX, -shiftY, 0);
 
             group = headerSortBy.FindDeepChild("Group");
             if (group != null)
             {
                 var groupRect = group.GetComponent<RectTransform>();
-                groupRect.sizeDelta += new Vector2(0, shiftY);
-                group.transform.localPosition -= new Vector3(0, shiftY / 2f, 0);
+                groupRect.sizeDelta += new Vector2(deltaX, shiftY);
+                group.transform.localPosition += new Vector3(deltaX / 2, -shiftY / 2f, 0);
             }
 
             var codexUI = Resources.Load("UI/Book/Codex/Prefab/CodexUI") as GameObject;
@@ -93,5 +80,6 @@ namespace VagrusTranslationPatches.PriceHistory
 
             }
         }
+
     }
 }

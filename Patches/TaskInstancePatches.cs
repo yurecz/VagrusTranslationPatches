@@ -28,21 +28,21 @@ namespace VagrusTranslationPatches.Patches
                         text = "Restock for";
                         break;
                 }
-            __result =  Game.FromDictionary(text) + " " + __instance.faction.GetName(false);
+            __result =  text.FromDictionary() + " " + __instance.faction.GetName(false);
         }
 
         [HarmonyPatch("FormatMercenaryTitle")]
         [HarmonyPostfix]
         public static void FormatMercenaryTitle_Postfix(TaskInstance __instance, ref string __result)
         {
-            __result = Game.FromDictionary(__instance.mercenaryTask.type.ToString() + " for") + " " + __instance.faction.GetName();
+            __result = (__instance.mercenaryTask.type.ToString() + " for").FromDictionary() + " " + __instance.faction.GetName();
         }
 
         [HarmonyPatch("FormatExplorationTitle")]
         [HarmonyPostfix]
         public static void FormatExplorationTitle_Postfix(TaskInstance __instance, ref string __result)
         {
-            __result = Game.FromDictionary(__instance.explorationTask.type.ToString() + " for") + " " + __instance.faction.GetName();
+            __result = (__instance.explorationTask.type.ToString() + " for").FromDictionary() + " " + __instance.faction.GetName();
         }
 
         [HarmonyPatch("FormatRegularTooltip")]

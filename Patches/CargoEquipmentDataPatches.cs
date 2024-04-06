@@ -10,7 +10,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void SetLeft_Postfix(CargoEquipmentData __instance, EquipmentSlot slot, bool filled, bool mounted)
         {
-            __instance.leftTitle = "<b>" + slot.equipment.GetName().FromDictionary() + "</b>";
+            __instance.leftTitle = "<b>" + slot.equipment.GetName() + "</b>";
             if (mounted)
                 __instance.leftTitle += " <i>" + ("(" + "Equipped".FromDictionary() + ")").GetScaledLocalizedText("(Equipped)") + "</i>";
         }
@@ -19,7 +19,7 @@ namespace VagrusTranslationPatches.Patches
         [HarmonyPostfix]
         public static void SetRight_Postfix(CargoEquipmentData __instance, EquipmentSlot slot, bool filled, bool mounted)
         {
-            __instance.rightTitle = "<b>" + slot.equipment.GetName().FromDictionary() + "</b>";
+            __instance.rightTitle = "<b>" + slot.equipment.GetName() + "</b>";
             if (mounted)
                 __instance.rightTitle += " <i>"+("(" + "Equipped".FromDictionary() + ")").GetScaledLocalizedText("(Equipped)") + "</i>";
         }

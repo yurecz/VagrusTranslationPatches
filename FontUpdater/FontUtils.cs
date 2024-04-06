@@ -10,6 +10,10 @@ using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using Vagrus;
+using Vagrus.UI;
+using VagrusTranslationPatches;
+using VagrusTranslationPatches.Patches;
 using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches
@@ -55,19 +59,19 @@ namespace VagrusTranslationPatches
             return replacementRecords.OrderBy(kv => kv.Value);
         }
 
-        private static void ProcessMatchingRecords( Func<ReplacementFontMapping, bool> predicate, Dictionary<ReplacementFontMapping, int> replacementRecordsCount, int score = 1)
+        private static void ProcessMatchingRecords(Func<ReplacementFontMapping, bool> predicate, Dictionary<ReplacementFontMapping, int> replacementRecordsCount, int score = 1)
         {
-                foreach (var replacementRecord in ReplacementRecords.Where(predicate))
-                {
-                    replacementRecordsCount.TryGetValue(replacementRecord, out var record);
-                    replacementRecordsCount[replacementRecord] = record + 1;
-                }
+            foreach (var replacementRecord in ReplacementRecords.Where(predicate))
+            {
+                //replacementRecordsCount.TryGetValue(replacementRecord, out var record);
+                replacementRecordsCount[replacementRecord] = score;
+            }
         }
 
         public static void LoadFonts()
         {
-                 var currentDirectory = Directory.GetCurrentDirectory();
-                string iniFontFile = Path.Combine(currentDirectory, "BepInEx\\plugins\\VagrusTranslationPatches", "fonts.ini");
+            var currentDirectory = Directory.GetCurrentDirectory();
+            string iniFontFile = Path.Combine(currentDirectory, "BepInEx\\plugins\\VagrusTranslationPatches", "fonts.ini");
 
             if (File.Exists(iniFontFile))
             {
@@ -93,7 +97,7 @@ namespace VagrusTranslationPatches
                         Font font = new Font(fontPath);
                         TMP_FontAsset fontAsset = TMP_FontAsset.CreateFontAsset(font);
                         fontAsset.name = fontAssetName;
-                        
+
                         var replacementRecords = new ReplacementFontMapping(fontAsset, fontAssetName, comment, (string)replacementFontFile["FontPath"]);
 
                         string targetRegEx = (string)replacementFontFile["TargetRegEx"];
@@ -104,6 +108,7 @@ namespace VagrusTranslationPatches
                         replacementRecords.ReplacementFont.WordSpacing = (float?)replacementFontFile["WordSpacing"];
                         replacementRecords.ReplacementFont.ParagraphSpacing = (float?)replacementFontFile["ParagraphSpacing"];
                         replacementRecords.ReplacementFont.CharacterSpacing = (float?)replacementFontFile["CharacterSpacing"];
+                        replacementRecords.ReplacementFont.EnableWordWrapping = (bool?)replacementFontFile["EnableWordWrapping"];
 
                         if (Enum.TryParse<HorizontalAlignmentOptions>(replacementFontFile["HorizontalAlignment"]?.ToString() ?? "", out HorizontalAlignmentOptions resultH))
                         {
@@ -123,7 +128,14 @@ namespace VagrusTranslationPatches
                             replacementRecords.ReplacementFont.VerticalAlignment = null;
                         }
 
-
+                        if (Enum.TryParse<TextOverflowModes>(replacementFontFile["OverflowMode"]?.ToString() ?? "", out TextOverflowModes resultO))
+                        {
+                            replacementRecords.ReplacementFont.OverflowMode = resultO;
+                        }
+                        else
+                        {
+                            replacementRecords.ReplacementFont.OverflowMode = null;
+                        }
 
                         var outline = replacementFontFile["Outline"];
                         if (outline != null)
@@ -137,7 +149,7 @@ namespace VagrusTranslationPatches
                         var underlay = replacementFontFile["Underlay"];
                         if (underlay != null)
                         {
-                            var color = ((string)underlay["Color"]).HexToColor32(); 
+                            var color = ((string)underlay["Color"]).HexToColor32();
                             var offsetX = (float)underlay["OffsetX"];
                             var offsetY = (float)underlay["OffsetY"];
                             var dilate = (float)underlay["Dilate"];
@@ -181,6 +193,8 @@ namespace VagrusTranslationPatches
                     || replacementFont.LineSpacing != textMesh.lineSpacing
                     || replacementFont.CharacterSpacing != textMesh.characterSpacing
                     || replacementFont.ParagraphSpacing != textMesh.paragraphSpacing
+                    || replacementFont.EnableWordWrapping != textMesh.enableWordWrapping
+                    || replacementFont.OverflowMode != textMesh.overflowMode
                     )
                 {
                     var originalParameters = PreserveParameters(textMesh);
@@ -252,6 +266,16 @@ namespace VagrusTranslationPatches
                     else
                     {
                         textMesh.materialForRendering.DisableKeyword(ShaderUtilities.Keyword_Underlay);
+                    }
+
+                    if (replacementFont.EnableWordWrapping != null)
+                    {
+                        textMesh.enableWordWrapping = replacementFont.EnableWordWrapping.Value;
+                    }
+
+                    if (replacementFont.OverflowMode != null)
+                    {
+                        textMesh.overflowMode = replacementFont.OverflowMode.Value;
                     }
 
                     //textMesh.ForceMeshUpdate(true, true);

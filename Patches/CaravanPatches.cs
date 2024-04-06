@@ -17,6 +17,37 @@ namespace VagrusTranslationPatches.Patches
 
         //}
 
+        [HarmonyPatch("FormatMoneyLyrgBross")]
+        [HarmonyPostfix]
+        private static void FormatMoneyLyrgBross_Postfix(Caravan __instance, ref string __result, int _money = int.MaxValue, bool showZero = true, bool showLeadZero = true, int digits = 2)
+        {
+            __instance.MoneyToCurrency(out var _, out var lyrg, out var bross, _money);
+            string text = lyrg.ToString();
+            string text2 = bross.ToString();
+            string text3 = "";
+            while (text2.Length < digits)
+            {
+                text2 += " ";
+            }
+
+            while (text.Length < digits)
+            {
+                text += " ";
+            }
+
+            if (bross != 0 || (showZero && text3.Length > 0) || (showLeadZero && text3.Length == 0))
+            {
+                text3 += __instance.GetMoneySprite(TextSprite.Bross, text2);
+            }
+
+            if (lyrg != 0 || (showZero && text3.Length > 0) || (showLeadZero && text3.Length == 0))
+            {
+                text3 += (text3.Length > 0?"  ":"") + __instance.GetMoneySprite(TextSprite.Lyrg, text);
+            }
+
+            __result = text3.Trim();
+        }
+
         [HarmonyPatch("LiberateUpdateCall")]
         [HarmonyPostfix]
         private static void LiberateUpdateCall_Postfix(Caravan __instance, int qty)

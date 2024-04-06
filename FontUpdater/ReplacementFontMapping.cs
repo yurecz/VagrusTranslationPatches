@@ -90,6 +90,8 @@ namespace VagrusTranslationPatches
         internal float? WordSpacing;
         internal float? LineSpacing;
         internal float? ParagraphSpacing;
+        internal bool? EnableWordWrapping;
+        internal TextOverflowModes? OverflowMode;
 
         public Outline Outline;
         public Underlay Underlay;

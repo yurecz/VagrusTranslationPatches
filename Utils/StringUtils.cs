@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace VagrusTranslationPatches.Utils
@@ -10,12 +11,12 @@ namespace VagrusTranslationPatches.Utils
             return str[0].ToString().ToUpper() + str.Substring(1);
         }
 
-        public static string FromDictionary(this string str,bool showWarning = false)
+        public static string FromDictionary(this string str,bool showWarning = true)
         {
             var text = Game.FromDictionary(str);
             if (!string.IsNullOrEmpty(str) && showWarning && text == str)
             {
-                TranslationPatchesPlugin.Log.LogWarning("Missing dictionary.csv translation for:" + str);
+                TranslationPatchesPlugin.Log.LogWarning("Missing in dictionary.csv the translation for text:" + str);
                 return str;
             }
             return text;
@@ -60,6 +61,24 @@ namespace VagrusTranslationPatches.Utils
             str = str.Replace(token, text);
 
             return str;
+        }
+
+        public static string RemoveFirstLineFromString(this string input)
+        {
+            // Split the input string into lines
+            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Check if there is more than one line
+            if (lines.Length > 1)
+            {
+                // Join the lines (excluding the first one) to form the result string
+                return string.Join(Environment.NewLine, lines, 1, lines.Length - 1);
+            }
+            else
+            {
+                // If there is only one line or the input is empty, return an empty string
+                return string.Empty;
+            }
         }
     }
 }

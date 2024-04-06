@@ -8,7 +8,7 @@ namespace VagrusTranslationPatches.Patches
     {
         [HarmonyPatch("FormatPriceDate")]
         [HarmonyPostfix]
-        public static void Awake_Postfix(PriceHistoryColumnHeader __instance, int ___daysOld, ref string __result)
+        public static void FormatPriceDate_Postfix(PriceHistoryColumnHeader __instance, int ___daysOld, ref string __result)
         {
                 string text = "";
                 var daysOld = ___daysOld;
@@ -18,7 +18,7 @@ namespace VagrusTranslationPatches.Patches
                 return;
                 }
                 text = text + "<color=" + VisualTweak.Gold + ">"+"Price Date:".FromDictionary()+"</color>\n";
-                __result =text + "<b><i>" + daysOld.FormatNumberByNomen("day") + "</i></b> "+"days old".FromDictionary();
+                __result =text + "<i>" + daysOld.ToDaysAgoText(true) + "</i>";
             }
         }
 }

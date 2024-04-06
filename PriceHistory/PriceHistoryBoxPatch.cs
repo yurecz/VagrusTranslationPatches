@@ -122,15 +122,17 @@ namespace VagrusTranslationPatches.PriceHistory
             sellProfitButton.SetToggleMode(toggleMode: true, "DisplayPriceGroup");
             sellProfitButton.SetClickMethod(ToggleDisplayPrice, 2);
             sellProfitButton.InitializeTooltip("pricehistory", fixtooltip: true);
-            sellProfitButton.UpdateTooltip("When selected, this option displays potential profit if sold.".FromDictionary());
+            sellProfitButton.UpdateTooltip("When selected this option displays potential profit if sold.".FromDictionary());
             sellProfitButton.Select(displayPriceToggle==2);
+            sellProfitButton.GetComponent<ButtonUI>().SetHoverEnabled(true);
 
             buyProfitButton = headerDisplayPrice.transform.Find("BuyProfit").GetComponent<ButtonUI>();
             buyProfitButton.SetToggleMode(toggleMode: true, "DisplayPriceGroup");
             buyProfitButton.SetClickMethod(ToggleDisplayPrice, 3);
             buyProfitButton.InitializeTooltip("pricehistory", fixtooltip: true);
-            buyProfitButton.UpdateTooltip("When selected, this option displays potential profit if bought.".FromDictionary());
+            buyProfitButton.UpdateTooltip("When selected this option displays potential profit if bought.".FromDictionary());
             buyProfitButton.Select(displayPriceToggle==3);
+            buyProfitButton.GetComponent<ButtonUI>().SetHoverEnabled(true);
 
             buttonDistance.Select(sortByToggle == 0);
             buttonDistance.SetClickMethod(ToggleSortByGroup, 0);
@@ -152,15 +154,17 @@ namespace VagrusTranslationPatches.PriceHistory
             sortBySellProfitButton.SetToggleMode(toggleMode: true, "SortByGroup");
             sortBySellProfitButton.SetClickMethod(ToggleSortByGroup, 3);
             sortBySellProfitButton.InitializeTooltip("pricehistory", fixtooltip: true);
-            sortBySellProfitButton.UpdateTooltip("When selected, this option arrange places/goods by sell profit.".FromDictionary());
+            sortBySellProfitButton.UpdateTooltip("When selected this option arrange places/goods by sell profit.".FromDictionary());
             sortBySellProfitButton.Select(sortByToggle == 3);
+            sortBySellProfitButton.GetComponent<ButtonUI>().SetHoverEnabled(true);
 
             sortByBuyProfitButton = ___headerSortBy.transform.Find("SortByBuyProfit").GetComponent<ButtonUI>();
             sortByBuyProfitButton.SetToggleMode(toggleMode: true, "SortByGroup");
             sortByBuyProfitButton.SetClickMethod(ToggleSortByGroup, 4);
             sortByBuyProfitButton.InitializeTooltip("pricehistory", fixtooltip: true);
-            sortByBuyProfitButton.UpdateTooltip("When selected, this option arrange places/goods by buy profit.".FromDictionary());
+            sortByBuyProfitButton.UpdateTooltip("When selected this option arrange places/goods by buy profit.".FromDictionary());
             sortByBuyProfitButton.Select(sortByToggle == 4);
+            sortByBuyProfitButton.GetComponent<ButtonUI>().SetHoverEnabled(true);
 
             var goodsFilter = gamObject.FindDeepChild("GoodsFilter");
             textInput = goodsFilter.FindDeepChild("GoodsNameFilter").GetComponent<TextInputUI>();
