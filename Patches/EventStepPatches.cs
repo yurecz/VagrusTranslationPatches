@@ -103,6 +103,55 @@ namespace VagrusTranslationPatches.Patches
 
         }
 
+        [HarmonyPatch("ExecuteAction", new Type[] { typeof(CharacterAction), typeof(bool), typeof(bool) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref, ArgumentType.Normal })]
+        [HarmonyPrefix]
+        public static bool ExecuteCharacterAction_Prefix(EventStep __instance, ref bool __result, CharacterAction characterAction, ref bool actionlogged, bool simulate = false)
+        {
+            var gameEvent = __instance.gameEvent;
+            var game = Game.game;
+            characterAction.SetCharacter(characterAction.character.IsRandom() ? game.caravan.GetRandomCompanion() : characterAction.character);
+            if (characterAction.GetCharacter() == null)
+            {
+                __result = false;
+                return false;
+            }
+            characterAction.rvalue = Game.GetRandomIncludeMax(characterAction.value, characterAction.value2);
+            bool result = game.ScheduleAction(characterAction, characterAction.afterdays, simulate);
+            if (simulate)
+            {
+                __result = result;
+                return false;
+            }
+            if (!characterAction.hide || Game.IsTest())
+            {
+                if (characterAction.type == ValueType.AddValue && characterAction.stat != 0)
+                {
+                    string row = String.Sign(characterAction.rvalue) + " " + characterAction.stat.ToString() + " on " + characterAction.GetCharacter().GameName();
+                    row = FormatAfterDays(row, characterAction.afterdays);
+                    gameEvent.AddLog(characterAction.hide ? String.TestBlock(row) : row);
+                    actionlogged = true;
+                }
+                else if (characterAction.stat != CharacterStat.Health && characterAction.type == ValueType.Unknown && !characterAction.reset)
+                {
+                    string row = characterAction.GetCharacter().GameName();
+
+                        if (characterAction.remove)
+                        {
+                            row = string.Format("{0} joined your <i>comitatus</i>".FromDictionary(), row);
+                        }
+                        else
+                        {
+                        row = string.Format("{0} was removed from your <i>comitatus</i>".FromDictionary(), row);
+                    }
+                    row = FormatAfterDays(row, characterAction.afterdays);
+                    gameEvent.AddLog(characterAction.hide ? String.TestBlock(row) : row);
+                    actionlogged = true;
+                }
+            }
+            __result = false;
+            return false;
+        }
+
         [HarmonyPatch("ExecuteAction", new Type[] { typeof(PropertyAction), typeof(bool), typeof(bool) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref, ArgumentType.Normal })]
         [HarmonyPrefix]
         public static bool ExecutePropertyAction_Prefix(EventStep __instance, ref bool __result, PropertyAction propertyAction, ref bool actionlogged, ref bool simulate)

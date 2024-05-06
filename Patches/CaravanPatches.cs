@@ -114,5 +114,57 @@ namespace VagrusTranslationPatches.Patches
                 marketQtyUI.UpdateGeneralText(text);
             }
         }
+
+
+        [HarmonyPatch("GetPropertyDetails")]
+        [HarmonyPrefix]
+        public static bool GetPropertyDetails_Prefix(Caravan __instance, ref string __result, Prop prop, bool total = true)
+        {
+            PropInstance propInstance = __instance.FindProperty(prop);
+            if (propInstance == null)
+            {
+                Game.Exception("Property " + prop.ToString() + " not found.");
+                __result = "";
+                return false;
+            }
+            string text;
+            if (propInstance.property.IsPropList(PropList.Status))
+            {
+                text = __instance.GetPropertyLevelName(prop, int.MaxValue, total).ToString();
+            }
+            else
+            {
+                int num = propInstance.Get(total);
+                switch (prop)
+                {
+                    case Prop.Deputies:
+                    case Prop.CCDeputies:
+                        text = ((num == 0) ? "Not assigned".FromDictionary() : num.ToString());
+                        break;
+                    case Prop.CargoWorth:
+                    case Prop.CargoWorthWOStash:
+                    case Prop.EquipmentWorth:
+                    case Prop.ItemWorth:
+                    case Prop.ComitatusWorth:
+                    case Prop.ComitatusWorthWOTasks:
+                        text = __instance.FormatMoneySingle(num);
+                        break;
+                    default:
+                        text = num.ToString();
+                        break;
+                }
+            }
+            if (propInstance.property.percentage)
+            {
+                text += "%";
+            }
+            if ((uint)(prop - 158) <= 1u)
+            {
+                text += " " + "assigned".FromDictionary();
+            }
+            __result = text;
+            return false;
+        }
+
     }
 }

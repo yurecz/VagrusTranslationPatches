@@ -141,6 +141,7 @@
     <Compile Include="Patches\CrewCombatFightUIPatches.cs" />
     <Compile Include="Patches\CrewCombatFlagPatches.cs" />
     <Compile Include="Patches\CrewCombatOpenUIPatches.cs" />
+    <Compile Include="Patches\CrewCombatPatches.cs" />
     <Compile Include="Patches\CrewRowPatches.cs" />
     <Compile Include="Patches\EnhancedScrollControllerPatches.cs" />
     <Compile Include="Patches\EventStepPatches.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Patches\LoadSpecialFontPatches.cs" />
     <Compile Include="Patches\PoolLoaderPatches.cs" />
     <Compile Include="Patches\SkillPatches.cs" />
+    <Compile Include="Patches\StatioUIPatches.cs" />
     <Compile Include="Patches\StickyUIValueDisplayPatches.cs" />
     <Compile Include="Patches\MiniCaravanUIPatches.cs" />
     <Compile Include="Patches\CampUIPatches.cs" />

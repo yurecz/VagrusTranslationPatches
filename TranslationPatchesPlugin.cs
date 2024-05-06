@@ -269,6 +269,13 @@ namespace VagrusTranslationPatches
             HuntingTweak.OddJobsTitle = "Odd Jobs".FromDictionary(true);
 
             BookUI.notesCloseQuestion = "Any changes you have done will get lost.\n Are you sure?".FromDictionary(true);
+
+            VagrusCreationTweak.ReputationPrefix = VagrusCreationTweak.ReputationPrefix.FromDictionary();
+            VagrusCreationTweak.GoodsPostfix = "- " + "goods".FromDictionary().ToLower();
+            VagrusCreationTweak.EquipmentPostfix = "- " + "equipment".FromDictionary().ToLower();
+            VagrusCreationTweak.GearPostfix = "- " + "gear".FromDictionary().ToLower();
+            VagrusCreationTweak.ItemPostfix = "- " + "item".FromDictionary().ToLower();
+            VagrusCreationTweak.LeaderPerkPostfix = "- " + "perk".FromDictionary().ToLower();
     }
 
     }

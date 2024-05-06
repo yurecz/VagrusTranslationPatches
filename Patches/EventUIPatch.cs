@@ -35,7 +35,8 @@ namespace VagrusTranslationPatches.Patches
         //{
         //    foreach (var instruction in instructions)
         //    {
-        //        if (instruction.opcode == OpCodes.Ldstr && (string)instruction.operand == " required")
+        //        if (instruction.opcode == OpCodes.Ldstr && (string)instruction.operand == "
+        //        ")
 
         //            yield return new CodeInstruction(OpCodes.Ldstr, " требуется");
         //        else

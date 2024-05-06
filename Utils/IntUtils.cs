@@ -1,31 +1,35 @@
 ﻿using Epic.OnlineServices.Auth;
 using Epic.OnlineServices.UserInfo;
+using LingvoNET;
+using System;
 using UnityEngine;
 
 namespace VagrusTranslationPatches.Utils
 {
     public static class IntUtils
     {
-        public static string FormatNumberByNomen(this int number, string nomen)
+        public static string FormatNumberByNomen(this int number, string nomen,bool withSign = false)
         {
-            int lastDigit = number % 10;
-            int last2Digit = number % 100;
+            int module = Math.Abs(number);
+            string stringNumber = withSign? String.Sign(number):number.ToString();
+            int lastDigit = module % 10;
+            int last2Digit = module % 100;
             string formattedText;
             if (last2Digit > 4 && last2Digit <= 20) 
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen + "5") ?? Game.FromDictionary(nomen + "s")}";
+                formattedText = $"{stringNumber} {Game.FromDictionary(nomen + "5") ?? Game.FromDictionary(nomen + "s")}";
             }
             else if (lastDigit == 1)
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen)}";
+                formattedText = $"{stringNumber} {Game.FromDictionary(nomen)}";
             }
             else if (lastDigit > 1 && lastDigit <= 4)
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen + "2") ?? Game.FromDictionary(nomen + "s")}";
+                formattedText = $"{stringNumber} {Game.FromDictionary(nomen + "2") ?? Game.FromDictionary(nomen + "s")}";
             }
             else
             {
-                formattedText = $"{number} {Game.FromDictionary(nomen + "5") ?? Game.FromDictionary(nomen + "s")}";
+                formattedText = $"{stringNumber} {Game.FromDictionary(nomen + "5") ?? Game.FromDictionary(nomen + "s")}";
             }
 
             return formattedText.ToLower();

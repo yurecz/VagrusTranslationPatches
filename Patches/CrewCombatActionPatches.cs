@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using VagrusTranslationPatches.Utils;
 
 namespace VagrusTranslationPatches.Patches
 {
@@ -25,7 +26,7 @@ namespace VagrusTranslationPatches.Patches
                 __result = text + " - " + text2 + Game.FromDictionary("Companion Combat") + text3;
                 return;
             }
-            __result = text + " - " + type.ToString();
+            __result = text + " - " + type.ToString().FromDictionary();
             return;
         }
     }

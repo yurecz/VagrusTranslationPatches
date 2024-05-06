@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using Vagrus;
 using Vagrus.UI;
 using VagrusTranslationPatches.Patches;
@@ -121,9 +122,21 @@ namespace VagrusTranslationPatches
                     {
                         var gameObject = tab.TabPrefab.gameObject;
                         gameObject.UpdatePrefabFonts();
-                        if (gameObject.name == "MansioUI")
+                        if (gameObject.name == "MansioUI" || gameObject.name == "StatioUI")
                         {
                             gameObject.FindDeep("BeastType").AddComponent<UIElementTranslator>();
+                            gameObject.FindDeep("Prerequisites/Capacity/Title")?.AddComponent<UIElementTranslator>();
+                            gameObject.FindDeep("Prerequisites/Beast Capacity/Title")?.AddComponent<UIElementTranslator>();
+                            gameObject.FindDeep("Prerequisites/Maintenance/Title")?.AddComponent<UIElementTranslator>();
+
+                        }
+                        if (gameObject.name == "WarehouseUI")
+                        {
+                            gameObject.FindDeep("BtnCargo/Name").GetComponent<TextMeshProUGUI>().text = "Goods";
+                        }
+                        if (gameObject.name == "AdministrationUI")
+                        {
+                            gameObject.FindDeep("Supplies/HFText").GetComponent<TextMeshProUGUI>().text = "Production/Hunting/Foraging";
                         }
                     }
                 }
@@ -158,8 +171,11 @@ namespace VagrusTranslationPatches
 
             //Crew combat
             var crewCombatUI = PatchObject.instance.UpdatePrefab("CrewCombat/Prefab/CrewCombatUI");
-            crewCombatUI.FindDeep("Odds").AddIfNotExistComponent<UIElementTranslator>();
-            crewCombatUI.FindDeep("Title").AddIfNotExistComponent<UIElementTranslator>();
+            crewCombatUI.FindDeep("ChoiceMoveOn/Odds").AddIfNotExistComponent<UIElementTranslator>();
+            crewCombatUI.FindDeep("ChoiceSack/Odds").AddIfNotExistComponent<UIElementTranslator>();
+            crewCombatUI.FindDeep("ChoiceFlee/Odds").AddIfNotExistComponent<UIElementTranslator>();
+            crewCombatUI.FindDeep("ChoiceFight/Odds").AddIfNotExistComponent<UIElementTranslator>();
+            crewCombatUI.FindDeep("ChooseGoal/Title").AddIfNotExistComponent<UIElementTranslator>();
 
             PatchObject.instance.UpdatePrefab("UI/Prefab/CrewCombatGoal");
             PatchObject.instance.UpdatePrefab("UI/Prefab/CrewCombatGoalSmall");
